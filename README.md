@@ -65,6 +65,6 @@ Your Personal Streaming Oasis.
     <img src="https://img.shields.io/badge/firebase-7c3aed?style=for-the-badge&logo=firebase&logoColor=white" alt="react official Website"/>
 </p>
 
-## **Screenshots**
+<!-- ## **Screenshots**
 
-Here are some screenshots on various devices
+Here are some screenshots on various devices -->
