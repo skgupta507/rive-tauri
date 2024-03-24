@@ -17,6 +17,7 @@ Your Personal Streaming Oasis
 # **_Rive-Tauri_**
 
 Rive is a cutting-edge platform for streaming movies and TV shows online. Our project utilizes Next.js.
+
 Your Personal Streaming Oasis.
 
 <div align="left">
