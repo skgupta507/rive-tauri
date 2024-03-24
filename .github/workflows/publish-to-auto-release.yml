@@ -2,8 +2,6 @@ name: "publish"
 
 on:
   push:
-    tags:
-      - v__VERSION__
     branches:
       - release
 
@@ -22,15 +20,6 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Build changelog
-        id: build_changelog
-        run: |
-          # NOTE: if commits subjects are standardized, you can filter the git log based on feat: and fix:
-          # and then replace "feat:" with "New: " and "fix:" with "Fixed "
-          # when AI gets good, we can also summarized commits into a bullet point list
-          PREV_TAG=$(git tag --list v__VERSION__ | tail -n2 | head -n1)
-          echo "changelog=$(git log $PREV_TAG...${{ github.ref_name }} --pretty=format:"- %s")" >> $GITHUB_OUTPUT
 
       - name: setup node
         uses: actions/setup-node@v4
@@ -72,8 +61,6 @@ jobs:
         with:
           tagName: Rive-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
           releaseName: "Rive v__VERSION__"
-          releaseBody: |
-            ${{env.GITHUB_OUTPUT}}
-            See the assets to download this version and install.
+          releaseBody: "See the assets to download this version and install."
           releaseDraft: true
           prerelease: false
