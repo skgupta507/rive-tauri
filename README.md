@@ -41,9 +41,9 @@ Your Personal Streaming Oasis.
 - Login/ Signup for cloud syncing
 - Signin with email, or google (firebase)
 - Multiple server streaming
-- Download Movies/ TV shows using extensions like FetchV
 - Great Customization in settings
 - Great UI
+<!-- - Download Movies/ TV shows using extensions like FetchV -->
 
 <!-- ## **Word From Developer**:
 
