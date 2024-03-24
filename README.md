@@ -16,7 +16,9 @@ Your Personal Streaming Oasis
 
 # **_Rive-Tauri_**
 
-Rive is a cutting-edge platform for streaming movies and TV shows online. Our project utilizes Next.js.
+Rive is a cutting-edge platform for streaming movies and TV shows on your pc.
+
+Our project utilizes Next.js + Tauri
 
 Your Personal Streaming Oasis.
 
@@ -65,6 +67,11 @@ Your Personal Streaming Oasis.
     <img src="https://img.shields.io/badge/firebase-7c3aed?style=for-the-badge&logo=firebase&logoColor=white" alt="react official Website"/>
 </p>
 
-<!-- ## **Screenshots**
+## **Screenshots**
 
-Here are some screenshots on various devices -->
+Here are some screenshots on various devices
+
+| Dark Mode                                               | Light Mode                                              | Customizations                                          | Search Functionality                                    |
+| ------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------- |
+| ![](./screenshots/Screenshot%202024-03-24%20153052.png) | ![](./screenshots/Screenshot%202024-03-24%20153748.png) | ![](./screenshots/Screenshot%202024-03-24%20153625.png) | ![](./screenshots/Screenshot%202024-03-24%20153104.png) |
+| ![](./screenshots/Screenshot%202024-03-24%20153546.png) | ![](./screenshots/Screenshot%202024-03-24%20153853.png) | ![](./screenshots/Screenshot%202024-03-24%20153717.png) | ![](./screenshots/Screenshot%202024-03-24%20153537.png) |
