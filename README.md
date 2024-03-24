@@ -28,6 +28,7 @@ Your Personal Streaming Oasis.
 ![GitHub repo size](https://img.shields.io/github/repo-size/Developabile/rive-tauri)
 ![Github LOC](https://tokei.rs/b1/github/Developabile/rive-tauri)
 ![Github Files](https://tokei.rs/b1/github/Developabile/rive-tauri?category=files)
+[![publish](https://github.com/Developabile/rive-tauri/actions/workflows/publish-to-auto-release.yml/badge.svg?branch=release)](https://github.com/Developabile/rive-tauri/actions/workflows/publish-to-auto-release.yml)
 
  </p>
 </div>
