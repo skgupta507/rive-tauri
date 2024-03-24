@@ -8,3 +8,4 @@ Dockerfile
 .husky/
 .next/
 public/
+src-tauri/target/
