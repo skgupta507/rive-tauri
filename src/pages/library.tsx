@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axiosFetch from "@/Utils/fetch";
+import axiosFetch from "@/Utils/fetchBackend";
 import styles from "@/styles/Library.module.scss";
 import MovieCardSmall from "@/components/MovieCardSmall";
 import ReactPaginate from "react-paginate"; // for pagination
@@ -37,9 +37,9 @@ const Library = () => {
         const userID = user.uid;
         setUser(userID);
         // setIds(await getBookmarks(userID)?.movie)
-        setLoading(false);
+        // setLoading(false);
       } else {
-        setLoading(true);
+        // setLoading(true);
       }
     });
   }, []);
@@ -52,26 +52,32 @@ const Library = () => {
 
   useEffect(() => {
     setLoading(true);
-    setData([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    // setData([0, 0, 0, 0, 0, 0, 0, 0, 0]);
     const fetchData = async () => {
+      let arr: any = [];
       try {
-        let arr: any = [];
-        ids.map(async (ele: any) => {
+        for (const ele of ids) {
           const data = await axiosFetch({
             requestID: `${subCategory}Data`,
             id: ele,
           });
-          if (data !== undefined) arr.push(data);
+          if (data !== undefined) await arr.push(data);
           console.log({ arr });
-          setData(arr);
-          setLoading(false);
-        });
-        if (ids.length === 0) setLoading(false);
+          // setLoading(false);
+        }
+        // if (ids.length === 0 || ids === null || ids === undefined)
+        //   setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setLoading(false);
       }
+      return arr;
     };
-    fetchData();
+    fetchData().then((res) => {
+      console.log({ res });
+      setData(res);
+      setLoading(false);
+    });
   }, [ids]);
 
   useEffect(() => {

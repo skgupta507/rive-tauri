@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axiosFetch from "@/Utils/fetch";
+import axiosFetch from "@/Utils/fetchBackend";
 import styles from "./style.module.scss";
 import MovieCardSmall from "@/components/MovieCardSmall";
 import ReactPaginate from "react-paginate"; // for pagination
@@ -25,6 +25,7 @@ const CategorywisePage = ({ categoryType }: any) => {
   const [filterGenreList, setFilterGenreList] = useState("");
   const [filterCountry, setFiltercountry] = useState();
   const [filterYear, setFilterYear] = useState();
+  const [sortBy, setSortBy] = useState();
   const [trigger, setTrigger] = useState(false);
   const [loading, setLoading] = useState(true);
   console.log(capitalizeFirstLetter(categoryType));
@@ -36,7 +37,7 @@ const CategorywisePage = ({ categoryType }: any) => {
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
-      setData([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+      // setData([0, 0, 0, 0, 0, 0, 0, 0, 0]); // for blink loading effect
       try {
         let data;
         if (category === "filter") {
@@ -46,7 +47,7 @@ const CategorywisePage = ({ categoryType }: any) => {
             genreKeywords: filterGenreList,
             country: filterCountry,
             year: filterYear,
-            sortBy: "vote_average.desc",
+            sortBy: sortBy,
           });
         } else {
           data = await axiosFetch({
@@ -63,6 +64,7 @@ const CategorywisePage = ({ categoryType }: any) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setLoading(false);
       }
     };
     fetchData();
@@ -93,7 +95,7 @@ const CategorywisePage = ({ categoryType }: any) => {
           className={`${category === "topRated" ? styles.active : styles.inactive}`}
           onClick={() => setCategory("topRated")}
         >
-          Top Rated
+          Top-Rated
         </p>
         <p
           className={`${category === "filter" ? styles.active : styles.inactive} ${styles.filter}`}
@@ -118,6 +120,8 @@ const CategorywisePage = ({ categoryType }: any) => {
           filterGenreList={filterGenreList}
           filterCountry={filterCountry}
           filterYear={filterYear}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
           setCategory={setCategory}
           setTrigger={setTrigger}
           trigger={trigger}
@@ -127,11 +131,10 @@ const CategorywisePage = ({ categoryType }: any) => {
         {data.map((ele: any) => {
           return <MovieCardSmall data={ele} media_type={categoryType} />;
         })}
-        {/* {
-          data?.length === 0 && dummyList.map((ele) => (
-            <Skeleton className={styles.loading} />
-          ))
-        } */}
+        {data?.length === 0 &&
+          dummyList.map((ele) => <Skeleton className={styles.loading} />)}
+        {/* {data?.total_results === 0 &&
+          <h1>No Data Found</h1>} */}
       </div>
       <ReactPaginate
         containerClassName={styles.pagination}

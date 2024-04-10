@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./style.module.scss";
-import axiosFetch from "@/Utils/fetch";
+import axiosFetch from "@/Utils/fetchBackend";
 import "react-loading-skeleton/dist/skeleton.css";
 // import Image from "next/image";
 import Carousel from "../Carousel";
@@ -121,7 +121,14 @@ const HomeHero = () => {
         <div className={styles.curvy3}></div>
         <div className={styles.curvy4}></div>
         <div className={styles.HomeHeroMeta} key={data[index]?.id}>
-          <h1>{data[index]?.title || data[index]?.name || <Skeleton />}</h1>
+          <h1
+            data-tooltip-id="tooltip"
+            data-tooltip-content={
+              data[index]?.title || data[index]?.name || "name"
+            }
+          >
+            {data[index]?.title || data[index]?.name || <Skeleton />}
+          </h1>
           <div className={styles.HomeHeroMetaRow2}>
             <p className={styles.type}>
               {data[index] ? (

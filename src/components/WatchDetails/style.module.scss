@@ -1,13 +1,18 @@
 .MetaDetailPage {
-  height: 100vh;
-  width: 100%;
+  height: 85vh;
+  width: clamp(20rem, 100vw, 25rem);
+  border-radius: 1rem;
   overflow-y: auto;
   overflow-x: hidden;
-  // background: var(--primary-1);
+  background: var(--primary-1);
   padding: 1rem;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
+  position: absolute;
+  top: 5rem;
+  right: 1.5rem;
+  z-index: 2;
   .MetaDetails {
     height: 100%;
     width: 100%;
@@ -32,7 +37,6 @@
       padding: 1rem 0;
       margin-bottom: 1rem;
       border-bottom: 1px solid var(--primary-2);
-      z-index: 2;
     }
     h3,
     h4 {
@@ -43,16 +47,20 @@
       color: var(--primary-2);
     }
     .casts {
+      h4 {
+        margin-top: 0;
+      }
       height: 100%;
       width: 100%;
       display: flex;
       justify-content: flex-start;
-      align-items: center;
+      align-items: flex-start;
+      // flex-direction: column;
       gap: 1rem;
       flex-wrap: wrap;
       .header {
         width: 100%;
-        // margin-top: 0;
+        margin-bottom: 1rem;
       }
       .cast {
         display: flex;
@@ -99,18 +107,6 @@
         height: unset;
         max-height: unset !important;
       }
-      .numberedCard {
-        position: relative;
-        .number {
-          padding: 0.5rem;
-          position: absolute;
-          background: var(--bg-color);
-          color: var(--primary-2);
-          border-radius: 0rem 0rem 0.3rem 0.3rem;
-          top: 0;
-          left: 0.5rem;
-        }
-      }
     }
     .EpisodeList {
       gap: 0.1rem;
@@ -155,6 +151,7 @@
 
           .links {
             margin-bottom: 1rem;
+            // width: clamp(7rem,50%,25rem);
           }
         }
       }
@@ -165,6 +162,7 @@
     // height: 31.5px;
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     margin-top: 2px;
@@ -214,21 +212,40 @@
     fill: var(--ascent-color);
   }
 }
+
 .notAired {
   opacity: 0.7;
 }
 .notAiredTag {
   color: var(--primary-3);
+  display: inline-block;
+  width: 100%;
+}
+
+.highlightEpisode {
+  background: var(--primary-1) !important;
+  border: 1px solid var(--primary-2);
+}
+
+.close {
+  display: none;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 2;
 }
 
 @media (max-width: 769px) {
   .MetaDetailPage {
-    height: 100%;
+    height: 90%;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    background: var(--primary-1);
+    // background: var(--bg-color);
     border-radius: 1rem;
+    top: 0;
+    right: 0;
+    z-index: 3;
     .MetaDetails {
       position: relative;
       padding-top: 4rem;
@@ -259,13 +276,11 @@
     }
     .EpisodeList {
       .episode {
-        display: block !important;
-        width: 100%;
+        display: flex !important;
+        height: 5rem;
         .img,
         .CardSmall {
-          height: 8rem !important;
-          width: 7rem !important;
-          display: inline-block;
+          display: none;
         }
         .details {
           margin-top: 1rem;
@@ -274,5 +289,8 @@
         }
       }
     }
+  }
+  .close {
+    display: block;
   }
 }

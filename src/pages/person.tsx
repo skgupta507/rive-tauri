@@ -3,7 +3,7 @@ import { useSearchParams } from "next/navigation";
 import styles from "@/styles/Detail.module.scss";
 import MetaDetails from "@/components/MetaDetails";
 import Carousel from "@/components/Carousel";
-import axiosFetch from "@/Utils/fetch";
+import axiosFetch from "@/Utils/fetchBackend";
 import MoviePoster from "@/components/MoviePoster";
 import Skeleton from "react-loading-skeleton";
 import Link from "next/link";
@@ -75,7 +75,12 @@ const PersonPage = () => {
         <div className={styles.DetailBanner}>
           <div className={styles.curvy5}></div>
           <div className={styles.HomeHeroMeta} key={data?.id}>
-            <h1>{data?.name || <Skeleton />}</h1>
+            <h1
+              data-tooltip-id="tooltip"
+              data-tooltip-content={data?.name || "name"}
+            >
+              {data?.name || <Skeleton />}
+            </h1>
             <div className={styles.HomeHeroMetaRow2}>
               <p className={styles.type}>{data?.known_for_department}</p>
               {data?.homepage !== null ? (
