@@ -3,7 +3,7 @@ import { useSearchParams } from "next/navigation";
 import styles from "@/styles/Detail.module.scss";
 import MetaDetails from "@/components/MetaDetails";
 import Carousel from "@/components/Carousel";
-import axiosFetch from "@/Utils/fetch";
+import axiosFetch from "@/Utils/fetchBackend";
 import MoviePoster from "@/components/MoviePoster";
 import Skeleton from "react-loading-skeleton";
 import Link from "next/link";
@@ -49,7 +49,7 @@ const DetailPage = () => {
         setData(data);
         const Videos = await axiosFetch({ requestID: `${type}Videos`, id: id });
         setTrailer(
-          Videos.results.find(
+          Videos?.results?.find(
             (ele: any) => ele.type === "Trailer" && ele.official === true,
           ),
         );
@@ -159,7 +159,12 @@ const DetailPage = () => {
             <MoviePoster data={data} />
           </div>
           <div className={styles.HomeHeroMeta}>
-            <h1>{data?.title || data?.name || <Skeleton />}</h1>
+            <h1
+              data-tooltip-id="tooltip"
+              data-tooltip-content={data?.title || data?.name || "name"}
+            >
+              {data?.title || data?.name || <Skeleton />}
+            </h1>
             <div className={styles.HomeHeroMetaRow2}>
               <p className={styles.type}>
                 {data ? (type == "movie" ? "MOVIE" : "SHOW") : null}

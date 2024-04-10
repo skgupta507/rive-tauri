@@ -11,6 +11,7 @@ interface Fetch {
   country?: string;
   query?: string;
   season?: number;
+  episode?: number;
 }
 export default async function axiosFetch({
   requestID,
@@ -23,10 +24,12 @@ export default async function axiosFetch({
   country,
   query,
   season,
+  episode,
 }: Fetch) {
   const request = requestID;
   const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-  const baseURL = "https://api.themoviedb.org/3";
+  const baseURL = process.env.NEXT_PUBLIC_TMDB_API;
+  const randomURL = process.env.NEXT_PUBLIC_RANDOM_URL;
   const requests: any = {
     latestMovie: `${baseURL}/movie/now_playing?language=${language}&page=${page}`, //nowPlayingMovie
     latestTv: `${baseURL}/tv/airing_today?language=${language}&page=${page}`, // airingTodayTv
@@ -35,7 +38,7 @@ export default async function axiosFetch({
     topRatedMovie: `${baseURL}/movie/top_rated?language=${language}&page=${page}`,
     topRatedTv: `${baseURL}/tv/top_rated?language=${language}&page=${page}`,
     filterMovie: `${baseURL}/discover/movie?with_genres=${genreKeywords}&language=${language}&sort_by=${sortBy}${year != undefined ? "&year=" + year : ""}${country != undefined ? "&with_origin_country=" + country : ""}&page=${page}`,
-    filterTv: `${baseURL}/discover/tv?with_genres=${genreKeywords}&language=${language}&sort_by=${sortBy}${year != undefined ? "&year=" + year : ""}${country != undefined ? "&with_origin_country=" + country : ""}&page=${page}`,
+    filterTv: `${baseURL}/discover/tv?with_genres=${genreKeywords}&language=${language}&sort_by=${sortBy}${year != undefined ? "&first_air_date_year=" + year : ""}${country != undefined ? "&with_origin_country=" + country : ""}&page=${page}`,
     onTheAirTv: `${baseURL}/tv/on_the_air?language=${language}&page=${page}`,
     trending: `${baseURL}/trending/all/day?language=${language}&page=${page}`,
     trendingMovie: `${baseURL}/trending/movie/week?language=${language}&page=${page}`,
@@ -63,6 +66,9 @@ export default async function axiosFetch({
     movieRelated: `${baseURL}/movie/${id}/recommendations?language=${language}&page=${page}`,
     tvRelated: `${baseURL}/tv/${id}/recommendations?language=${language}&page=${page}`,
     tvEpisodes: `${baseURL}/tv/${id}/season/${season}?language=${language}`,
+    tvEpisodeDetail: `${baseURL}/tv/${id}/season/${season}/episode/${episode}?language=${language}`,
+    movieSimilar: `${baseURL}/movie/${id}/similar?language=${language}&page=${page}`,
+    tvSimilar: `${baseURL}/tv/${id}/similar?language=${language}&page=${page}`,
 
     // person
     personMovie: `${baseURL}/person/${id}/movie_credits?language=${language}&page=${page}`,
@@ -73,6 +79,9 @@ export default async function axiosFetch({
     genresTv: `${baseURL}/genre/tv/list?language=${language}`,
     countries: `${baseURL}/configuration/countries?language=${language}`,
     languages: `${baseURL}/configuration/languages`,
+
+    // random
+    random: `${randomURL}`,
   };
   const final_request = requests[request];
   // console.log({ final_request });

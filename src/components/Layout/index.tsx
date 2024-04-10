@@ -8,12 +8,23 @@ import SettingsPage from "../SettingsPage";
 import { usePathname } from "next/navigation";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
+import { fetchRandom } from "@/Utils/randomdata";
+
 const Layout = ({ children }: any) => {
   const [theme, setTheme] = useState("system");
   const [mode, setMode] = useState("liquidate");
   const [ascent_color, setAscent_color] = useState("gold");
   const [themeColor, setThemeColor] = useState<any>();
   const { push } = useRouter();
+
+  const fetchRandomData = async () => {
+    const res: any = await fetchRandom();
+    console.log({ res });
+    if (res?.type && res?.id) {
+      push(`/detail?type=${res.type}&id=${res.id}`);
+    }
+  };
+
   useEffect(() => {
     const values = getSettings();
     if (values !== null) {
@@ -27,6 +38,17 @@ const Layout = ({ children }: any) => {
       window.matchMedia("(prefers-color-scheme: dark)").matches;
     const themeColor = prefersDarkMode ? "#1b1919" : "#f4f7fe";
     setThemeColor(themeColor);
+
+    window.addEventListener("keydown", (event) => {
+      if (event.ctrlKey && event.key === "k") {
+        event.preventDefault();
+        push("/search");
+      }
+      if (event.ctrlKey && event.key === "R") {
+        event.preventDefault();
+        fetchRandomData();
+      }
+    });
     // console.log({ prefersDarkMode });
     // const metaThemeColor = document.querySelector("meta[name=theme-color]");
     // metaThemeColor?.setAttribute("content", themeColor);
@@ -34,13 +56,6 @@ const Layout = ({ children }: any) => {
   useEffect(() => {
     document.documentElement.style.setProperty("--ascent-color", ascent_color);
     document.documentElement.style.setProperty("--mode", mode);
-
-    window.addEventListener("keydown", (event) => {
-      if (event.ctrlKey && event.key === "k") {
-        event.preventDefault();
-        push("/search");
-      }
-    });
   }, [mode, ascent_color]);
   const path = usePathname();
   return (
@@ -48,16 +63,19 @@ const Layout = ({ children }: any) => {
       {mode === "dark" && (
         <Head>
           <meta name="theme-color" content="#1b1919" />
+          <meta name="msapplication-TileColor" content="#1b1919" />
         </Head>
       )}
       {mode === "light" && (
         <Head>
           <meta name="theme-color" content="#f4f7fe" />
+          <meta name="msapplication-TileColor" content="#f4f7fe" />
         </Head>
       )}
       {mode === "system" && (
         <Head>
           <meta name="theme-color" content={`${themeColor}`} />
+          <meta name="msapplication-TileColor" content={`${themeColor}`} />
         </Head>
       )}
       <div

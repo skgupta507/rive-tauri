@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
-import axiosFetch from "@/Utils/fetch";
+import { useState, useEffect, useRef } from "react";
+import axiosFetch from "@/Utils/fetchBackend";
 import styles from "@/styles/Search.module.scss";
 import ReactPaginate from "react-paginate"; // for pagination
 import { AiFillLeftCircle, AiFillRightCircle } from "react-icons/ai";
 import MovieCardLarge from "@/components/MovieCardLarge";
 import Skeleton from "react-loading-skeleton";
+import NProgress from "nprogress";
 // import MoviePoster from '@/components/MoviePoster';
 
 const dummyList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -14,10 +15,28 @@ const SearchPage = ({ categoryType }: any) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalpages, setTotalpages] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [genreListMovie, setGenreListMovie] = useState<any>([]);
+  const [genreListTv, setGenreListTv] = useState<any>([]);
+  const searchBar: any = useRef(null);
+
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const gM = await axiosFetch({ requestID: "genresMovie" });
+        const gT = await axiosFetch({ requestID: "genresTv" });
+        setGenreListMovie(gM.genres);
+        setGenreListTv(gT.genres);
+      } catch (error) {
+        console.error("Error fetching genres:", error);
+      }
+    };
+    fetchData();
+  }, []);
+  useEffect(() => {
+    let debounceTimer: NodeJS.Timeout;
     const fetchData = async (mode: any) => {
       setLoading(true);
-      setData([null, null, null, null, null, null, null, null, null, null]);
+      // setData([null, null, null, null, null, null, null, null, null, null]);
       try {
         let data;
         if (mode) {
@@ -42,15 +61,32 @@ const SearchPage = ({ categoryType }: any) => {
         console.error("Error fetching data:", error);
       }
     };
-    if (query?.length > 2) fetchData(true);
+    const debounceSearch = () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        if (query.length >= 3) {
+          fetchData(true);
+        }
+      }, 600);
+    };
+    if (query?.length > 2) debounceSearch();
     if (query?.length === 0) fetchData(false);
+    return () => clearTimeout(debounceTimer);
   }, [query, currentPage]);
+
+  useEffect(() => {
+    if (loading) {
+      NProgress.start();
+    } else NProgress.done(false);
+    searchBar?.current.focus();
+  }, [loading]);
 
   return (
     <div className={styles.MoviePage}>
       {/* <h1>Search</h1> */}
       <div className={styles.InputWrapper}>
         <input
+          ref={searchBar}
           type="text"
           className={styles.searchInput}
           value={query}
@@ -64,12 +100,33 @@ const SearchPage = ({ categoryType }: any) => {
         </h1>
       ) : null}
       <div className={styles.movieList}>
-        {data.map((ele: any) => {
-          return <MovieCardLarge data={ele} media_type={categoryType} />;
-        })}
+        {genreListMovie?.length > 0 &&
+          genreListTv?.length > 0 &&
+          data.map((ele: any) => {
+            return (
+              <MovieCardLarge
+                data={ele}
+                media_type={categoryType}
+                genresMovie={genreListMovie}
+                genresTv={genreListTv}
+              />
+            );
+          })}
         {query.length > 2 && data?.length === 0 ? <h1>No Data Found</h1> : null}
         {query.length > 2 && data === undefined
           ? dummyList.map((ele) => <Skeleton className={styles.loading} />)
+          : null}
+        {genreListMovie?.length === 0 || genreListTv?.length === 0
+          ? dummyList.map((ele: any) => {
+              return (
+                <MovieCardLarge
+                  data={ele}
+                  media_type={categoryType}
+                  genresMovie={genreListMovie}
+                  genresTv={genreListTv}
+                />
+              );
+            })
           : null}
       </div>
       <ReactPaginate

@@ -11,7 +11,7 @@
     justify-content: flex-start;
     align-items: center;
     flex-direction: row;
-    gap: 1rem;
+    gap: 1.2rem;
     margin-top: 1rem;
     .filter {
       position: absolute;
@@ -35,10 +35,14 @@
     flex-direction: row;
     flex-wrap: wrap;
     gap: 2rem 1rem;
+    p {
+      color: var(--primary-2);
+    }
 
     .loading {
       height: 15rem;
       width: 10rem;
+      border-radius: 0.5rem;
     }
   }
   .pagination {
@@ -101,6 +105,9 @@
     padding-left: unset;
     padding: 1.5rem 1rem;
     padding-bottom: 5rem;
+    .category {
+      gap: 1rem;
+    }
     .movieList {
       padding: 1rem;
       padding-left: 0.5rem;

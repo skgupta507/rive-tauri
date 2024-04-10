@@ -18,39 +18,29 @@ function capitalizeFirstLetter(string: string) {
 }
 
 const dummyList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-const MetaDetails = ({ id, type, data }: any) => {
-  const [category, setCategory] = useState<any>("overview"); // latest, trending, topRated
+const WatchDetails = ({
+  id,
+  type,
+  data,
+  season,
+  episode,
+  setWatchDetails,
+}: any) => {
+  const [category, setCategory] = useState<any>(
+    type === "tv" ? "episodes" : "related",
+  ); // latest, trending, topRated
   const [categoryData, setCategoryData] = useState<any>();
   const [imageLoading, setImageLoading] = useState<any>(true);
-  const [reviewDetail, setReviewDetail] = useState<any>("");
-  const [selectedSeason, setSelectedSeason] = useState<any>(1);
+  const [reviewDetail, setReviewDetail] = useState<any>(null);
+  const [selectedSeason, setSelectedSeason] = useState<any>(season);
   const [loading, setLoading] = useState(true);
+  const [imagePlaceholder, setImagePlaceholder] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalpages, setTotalpages] = useState(1);
   const [genreListMovie, setGenreListMovie] = useState<any>();
   const [genreListTv, setGenreListTv] = useState<any>();
-  const [imagePlaceholder, setImagePlaceholder] = useState(false);
-  const metaDetailsPage: any = useRef(null);
+  const watchDetailsPage: any = useRef(null);
 
-  const genres: Array<string> = [];
-  data?.genres?.map((ele: any) => {
-    genres.push(ele.name);
-  });
-  const spoken_languages: Array<string> = [];
-  data?.spoken_languages?.map((ele: any) => {
-    spoken_languages.push(ele?.english_name || ele?.name);
-  });
-  const production_countries: Array<string> = [];
-  data?.production_countries?.map((ele: any) => {
-    production_countries.push(ele.name);
-  });
-  const production_companies: Array<string> = [];
-  data?.production_companies?.map((ele: any) => {
-    production_companies.push(ele.name);
-  });
-  const release_date = new Date(data?.release_date || data?.first_air_date);
-  const end_date = new Date(data?.last_air_date);
-  const birthday = new Date(data?.birthday);
   const monthNames = [
     "January",
     "February",
@@ -65,7 +55,6 @@ const MetaDetails = ({ id, type, data }: any) => {
     "November",
     "December",
   ];
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -93,14 +82,24 @@ const MetaDetails = ({ id, type, data }: any) => {
               id: id,
               season: selectedSeason,
             });
+          } else if (category === "crew" || category === "guests") {
+            res = await axiosFetch({
+              requestID: `tvEpisodeDetail`,
+              id: id,
+              season: season,
+              episode: episode,
+              page: currentPage,
+            });
           } else {
             res = await axiosFetch({
               requestID: `${type}${CapitalCategoryType}`,
               id: id,
               page: currentPage,
             });
-            setCurrentPage(res?.page);
-            setTotalpages(res?.total_pages);
+            if (res.page > res.total_pages) {
+              setCurrentPage(res.total_pages);
+            }
+            setTotalpages(res.total_pages > 500 ? 500 : res.total_pages);
           }
           setCategoryData(res);
           setLoading(false);
@@ -113,61 +112,53 @@ const MetaDetails = ({ id, type, data }: any) => {
   }, [category, selectedSeason, currentPage]);
 
   const scrollToTop = () => {
-    metaDetailsPage?.current?.scrollTo(0, 0);
+    watchDetailsPage?.current?.scrollTo(0, 0);
   };
 
   return (
     <div className={styles.MetaDetailPage}>
-      <div className={styles.MetaDetails} ref={metaDetailsPage}>
+      <p
+        className={`${styles.close} btn`}
+        onClick={() => setWatchDetails(false)}
+      >
+        x
+      </p>
+      <div className={styles.MetaDetails} ref={watchDetailsPage}>
         <div className={styles.category}>
           {type === "tv" ? (
-            <p
-              className={`${category === "episodes" ? styles.active : styles.inactive}`}
-              onClick={() => setCategory("episodes")}
-            >
-              Episodes
-            </p>
-          ) : null}
-          <p
-            className={`${category === "overview" ? styles.active : styles.inactive}`}
-            onClick={() => setCategory("overview")}
-          >
-            Overview
-          </p>
-          {type !== "person" ? (
             <>
               <p
-                className={`${category === "casts" ? styles.active : styles.inactive}`}
-                onClick={() => setCategory("casts")}
+                className={`${category === "episodes" ? styles.active : styles.inactive}`}
+                onClick={() => setCategory("episodes")}
               >
-                Casts
+                Episodes
               </p>
               <p
-                className={`${category === "reviews" ? styles.active : styles.inactive}`}
-                onClick={() => setCategory("reviews")}
+                className={`${category === "crew" ? styles.active : styles.inactive}`}
+                onClick={() => setCategory("crew")}
               >
-                Reviews
+                Crew
               </p>
+              <p
+                className={`${category === "guests" ? styles.active : styles.inactive}`}
+                onClick={() => setCategory("guests")}
+              >
+                Guests
+              </p>
+            </>
+          ) : (
+            <>
               <p
                 className={`${category === "related" ? styles.active : styles.inactive}`}
                 onClick={() => setCategory("related")}
               >
                 Related
               </p>
-            </>
-          ) : (
-            <>
               <p
-                className={`${category === "movie" ? styles.active : styles.inactive}`}
-                onClick={() => setCategory("movie")}
+                className={`${category === "similar" ? styles.active : styles.inactive}`}
+                onClick={() => setCategory("similar")}
               >
-                Movies
-              </p>
-              <p
-                className={`${category === "tv" ? styles.active : styles.inactive}`}
-                onClick={() => setCategory("tv")}
-              >
-                TV Shows
+                Similar
               </p>
             </>
           )}
@@ -198,8 +189,8 @@ const MetaDetails = ({ id, type, data }: any) => {
               categoryData?.episodes?.map((ele: any) => {
                 return (
                   <div
-                    className={`${styles.episode} ${reviewDetail === ele?.id ? styles.ReviewDetail : null} ${new Date(ele?.air_date) >= new Date() ? styles.notAired : null}`}
-                    onClick={() =>
+                    className={`${styles.episode} ${reviewDetail === ele?.id ? styles.ReviewDetail : null} ${parseInt(selectedSeason) === parseInt(season) && parseInt(ele?.episode_number) === parseInt(episode) ? styles.highlightEpisode : null} ${new Date(ele?.air_date) >= new Date() ? styles.notAired : null}`}
+                    onClick={(e) =>
                       setReviewDetail((prev: any) =>
                         prev !== ele?.id ? ele?.id : "",
                       )
@@ -207,7 +198,7 @@ const MetaDetails = ({ id, type, data }: any) => {
                   >
                     <Link
                       href={`/watch?type=tv&id=${ele?.show_id}&season=${ele?.season_number}&episode=${ele?.episode_number}`}
-                      className={`${styles.CardSmall}`}
+                      className={styles.CardSmall}
                       onClick={(e) => e.stopPropagation()}
                     >
                       <div
@@ -267,7 +258,7 @@ const MetaDetails = ({ id, type, data }: any) => {
                           ? `• ${Math.floor(ele?.runtime / 60)}hr ${(ele?.runtime % 60).toFixed(0)}min`
                           : null}
                         {ele?.runtime < 60
-                          ? `• ${(ele?.runtime % 60).toFixed(0)}min `
+                          ? `• ${(ele?.runtime % 60).toFixed(0)}min`
                           : null}
                         {new Date(ele?.air_date) >= new Date() ? (
                           <span
@@ -299,207 +290,22 @@ const MetaDetails = ({ id, type, data }: any) => {
         {type === "tv" && category === "episodes" && categoryData === undefined
           ? dummyList.map((ele) => (
               <div className={styles.episode}>
-                <Skeleton
-                  height={100}
-                  className={styles.CardSmall}
-                  style={{ margin: "0.5rem 0" }}
-                />
+                <Skeleton height={100} className={styles.CardSmall} />
               </div>
             ))
           : null}
         <div className={styles.categoryDetails}>
-          {category === "overview" && type !== "person" && (
-            <>
-              {data?.tagline ? (
-                <h4>
-                  <q>{data?.tagline}</q>
-                </h4>
-              ) : null}
-              <p>{data?.overview}</p>
-              {release_date.getDate() ? (
-                <>
-                  <h3>Release</h3>
-                  <p>{`${release_date.getDate()} ${monthNames[release_date.getMonth()]} ${release_date.getFullYear()}`}</p>
-                </>
-              ) : null}
-              {data?.runtime ? (
-                <>
-                  <h3>Runtime</h3>
-                  <p>
-                    {data?.runtime >= 60
-                      ? `${Math.floor(data?.runtime / 60)}hr ${(data?.runtime % 60).toFixed(0)}min`
-                      : null}
-                    {data?.runtime < 60
-                      ? `${(data?.runtime % 60).toFixed(0)} min`
-                      : null}
-                  </p>
-                </>
-              ) : null}
-              {genres?.length > 0 ? (
-                <>
-                  <h3>Genre</h3>
-                  <p>{genres?.join(", ")}</p>
-                </>
-              ) : null}
-              {type === "tv" && (
-                <>
-                  <h3>Show Details</h3>
-                  {data?.status && <p> Status : {data?.status}</p>}
-                  {data?.number_of_seasons && (
-                    <p> Total Seasons : {data?.number_of_seasons}</p>
-                  )}
-                  {data?.number_of_episodes && (
-                    <p> Total Episodes : {data?.number_of_episodes}</p>
-                  )}
-                  {data?.next_episode_to_air !== null ? (
-                    <p>
-                      {" "}
-                      Next Episode to Air :{" "}
-                      {data?.next_episode_to_air?.episode_number} (
-                      {new Date(data?.next_episode_to_air?.air_date).getDate()}{" "}
-                      {
-                        monthNames[
-                          new Date(
-                            data?.next_episode_to_air?.air_date,
-                          ).getMonth()
-                        ]
-                      }{" "}
-                      {new Date(
-                        data?.next_episode_to_air?.air_date,
-                      ).getFullYear()}
-                      )
-                    </p>
-                  ) : null}
-                  {release_date && end_date && (
-                    <p>
-                      {" "}
-                      Aired :{" "}
-                      {`${release_date.getDate()} ${monthNames[release_date.getMonth()]} ${release_date.getFullYear()}`}{" "}
-                      -{" "}
-                      {data?.in_production
-                        ? "ongoing"
-                        : `${end_date.getDate()} ${monthNames[end_date.getMonth()]} ${end_date.getFullYear()}`}
-                    </p>
-                  )}
-                </>
-              )}
-              {spoken_languages?.length > 0 ? (
-                <>
-                  <h3>Spoken Languages</h3>
-                  <p>{spoken_languages?.join(", ")}</p>
-                </>
-              ) : null}
-              {production_countries?.length > 0 ? (
-                <>
-                  <h3>Production Countries</h3>
-                  <p>{production_countries?.join(", ")}</p>
-                </>
-              ) : null}
-              {production_companies?.length > 0 ? (
-                <>
-                  <h3>Production Companies</h3>
-                  <p>{production_companies?.join(", ")}</p>
-                </>
-              ) : null}
-            </>
-          )}
-          {category === "overview" && type === "person" && (
-            <>
-              <p>{data?.biography}</p>
-              {birthday.getDate() ? (
-                <>
-                  <h3>Birthday</h3>
-                  <p>{`${birthday.getDate()} ${monthNames[birthday.getMonth()]} ${birthday.getFullYear()}`}</p>
-                </>
-              ) : null}
-              {data?.place_of_birth ? (
-                <>
-                  <h3>Place of Birth</h3>
-                  <p>{data?.place_of_birth}</p>
-                </>
-              ) : null}
-              {data?.known_for_department ? (
-                <>
-                  <h3>Department</h3>
-                  <p>{data?.known_for_department}</p>
-                </>
-              ) : null}
-            </>
-          )}
-          {category === "overview" && (data == undefined || data === null) && (
-            <Skeleton count={10} style={{ margin: "0.5rem 0" }} />
-          )}
           <div className={styles.casts}>
-            {category === "casts" && (
+            {category === "crew" && (
               <>
-                <h4 className={styles.header}>Cast</h4>
-                {categoryData?.cast?.map((ele: any) => (
-                  <div className={styles.cast}>
-                    <Link
-                      href={`/person?id=${ele?.id}`}
-                      className={styles.CardSmall}
-                    >
-                      <div
-                        className={`${styles.img} ${imageLoading ? "skeleton" : null}`}
-                      >
-                        {/* if rllic package is not available, then start using this code again, and comment/delete the rllic code */}
-                        {/* <AnimatePresence mode="sync">
-                          <motion.img
-                            key={ele?.id}
-                            src={`${ele?.profile_path !== null && ele?.profile_path !== undefined ? process.env.NEXT_PUBLIC_TMBD_IMAGE_URL + ele?.profile_path : "/images/logo.svg"}`}
-                            initial={{ opacity: 0 }}
-                            animate={{
-                              opacity: imageLoading ? 0 : 1,
-                            }}
-                            height="100%"
-                            width="100%"
-                            exit="exit"
-                            className={`${styles.img} ${imageLoading ? "skeleton" : null}`}
-                            onLoad={() => {
-                              setImageLoading(false);
-                            }}
-                            loading="lazy"
-                          // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
-                          />
-                        </AnimatePresence> */}
-
-                        {/* react-lazy-load-image-component */}
-                        <LazyLoadImage
-                          key={ele?.id}
-                          src={`${imagePlaceholder ? "/images/logo.svg" : ele?.profile_path !== null && ele?.profile_path !== undefined ? process.env.NEXT_PUBLIC_TMBD_IMAGE_URL + ele?.profile_path : "/images/logo.svg"}`}
-                          height="100%"
-                          width="100%"
-                          useIntersectionObserver={true}
-                          effect="opacity"
-                          className={`${styles.img} ${imageLoading ? "skeleton" : null}`}
-                          onLoad={() => {
-                            setImageLoading(false);
-                          }}
-                          onError={(e) => {
-                            // console.log({ e });
-                            setImagePlaceholder(true);
-                            setImageLoading(false);
-                          }}
-                          loading="lazy"
-                          // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
-                        />
-                      </div>
-                    </Link>
-                    <div className={styles.castName}>
-                      <h4>{ele?.name}</h4>
-                      <p>{ele?.character}</p>
-                    </div>
-                  </div>
-                ))}
-                {category === "casts" &&
-                  categoryData === undefined &&
-                  dummyList.map((ele) => (
-                    <div className={styles.cast}>
-                      <Skeleton height={100} width={100} />
-                      <Skeleton height={20} width={50} />
-                    </div>
-                  ))}
-                <h4 className={styles.header}>Crew</h4>
+                <div className={styles.header}>
+                  <h4>{`S${season}E${episode}`}</h4>
+                  {categoryData?.crew?.length !== 0 ? (
+                    <p>crew of this episode</p>
+                  ) : (
+                    <p>No crew found</p>
+                  )}
+                </div>
                 {categoryData?.crew?.map((ele: any) => (
                   <div className={styles.cast}>
                     <Link
@@ -558,16 +364,100 @@ const MetaDetails = ({ id, type, data }: any) => {
                     </div>
                   </div>
                 ))}
-                {category === "casts" &&
-                  categoryData === undefined &&
-                  dummyList.map((ele) => (
-                    <div className={styles.cast}>
-                      <Skeleton height={100} width={100} />
-                      <Skeleton height={20} width={50} />
-                    </div>
-                  ))}
               </>
             )}
+            {category === "crew" &&
+              categoryData === undefined &&
+              dummyList.map((ele) => (
+                <div className={styles.cast}>
+                  <Skeleton height={100} width={100} />
+                  <Skeleton height={20} width={50} />
+                </div>
+              ))}
+          </div>
+          <div className={styles.casts}>
+            {category === "guests" && (
+              <>
+                <div className={styles.header}>
+                  <h4>{`S${season}E${episode}`}</h4>
+                  {categoryData?.guest_stars?.length !== 0 ? (
+                    <p>guest stars in this episode</p>
+                  ) : (
+                    <p>No notable guest star in this episode </p>
+                  )}
+                </div>
+                {categoryData?.guest_stars?.map((ele: any) => (
+                  <div className={styles.cast}>
+                    <Link
+                      href={`/person?id=${ele?.id}`}
+                      className={styles.CardSmall}
+                    >
+                      <div
+                        className={`${styles.img} ${imageLoading ? "skeleton" : null}`}
+                      >
+                        {/* if rllic package is not available, then start using this code again, and comment/delete the rllic code */}
+                        {/* <AnimatePresence mode="sync">
+                          <motion.img
+                            key={ele?.id}
+                            src={`${ele?.profile_path !== null && ele?.profile_path !== undefined ? process.env.NEXT_PUBLIC_TMBD_IMAGE_URL + ele?.profile_path : "/images/logo.svg"}`}
+                            initial={{ opacity: 0 }}
+                            animate={{
+                              opacity: imageLoading ? 0 : 1,
+                            }}
+                            height="100%"
+                            width="100%"
+                            exit="exit"
+                            className={`${styles.img} ${imageLoading ? "skeleton" : null}`}
+                            onLoad={() => {
+                              setImageLoading(false);
+                            }}
+                            loading="lazy"
+                          // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
+                          />
+                        </AnimatePresence> */}
+
+                        {/* react-lazy-load-image-component */}
+                        <LazyLoadImage
+                          key={ele?.id}
+                          src={`${imagePlaceholder ? "/images/logo.svg" : ele?.profile_path !== null && ele?.profile_path !== undefined ? process.env.NEXT_PUBLIC_TMBD_IMAGE_URL + ele?.profile_path : "/images/logo.svg"}`}
+                          height="100%"
+                          width="100%"
+                          useIntersectionObserver={true}
+                          effect="opacity"
+                          className={`${styles.img} ${imageLoading ? "skeleton" : null}`}
+                          onLoad={() => {
+                            setImageLoading(false);
+                          }}
+                          onError={(e) => {
+                            // console.log({ e });
+                            setImagePlaceholder(true);
+                            setImageLoading(false);
+                          }}
+                          loading="lazy"
+                          // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
+                        />
+                      </div>
+                    </Link>
+                    <div className={styles.castName}>
+                      <h4>{ele?.name}</h4>
+                      <p>{ele?.character || ele?.job}</p>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+            {category === "guests" &&
+              categoryData === undefined &&
+              dummyList.map((ele) => (
+                <div className={styles.cast}>
+                  <Skeleton height={100} width={100} />
+                  <Skeleton height={20} width={50} />
+                </div>
+              ))}
+            {/* {category === "guests" &&
+              categoryData?.guest_stars?.length === 0 && (
+                <p>No notable guest star in this episode </p>
+              )} */}
           </div>
           <div className={styles.MovieList}>
             <>
@@ -582,30 +472,6 @@ const MetaDetails = ({ id, type, data }: any) => {
                     />
                   );
                 })}
-              {category === "related" && categoryData?.results?.length > 0 && (
-                <ReactPaginate
-                  containerClassName={styles.pagination}
-                  pageClassName={styles.page_item}
-                  activeClassName={styles.paginateActive}
-                  onPageChange={(event) => {
-                    setCurrentPage(event.selected + 1);
-                    console.log({ event });
-                    if (currentPage > totalpages) {
-                      setCurrentPage(totalpages);
-                    }
-                    window.scrollTo(0, 0);
-                    scrollToTop();
-                  }}
-                  pageCount={totalpages}
-                  breakLabel=" ... "
-                  previousLabel={
-                    <AiFillLeftCircle className={styles.paginationIcons} />
-                  }
-                  nextLabel={
-                    <AiFillRightCircle className={styles.paginationIcons} />
-                  }
-                />
-              )}
             </>
             {category === "related" && categoryData?.results?.length === 0 && (
               <p>No Recommendations</p>
@@ -623,112 +489,59 @@ const MetaDetails = ({ id, type, data }: any) => {
                 </div>
               ))}
           </div>
-          <div className={styles.ReviewList}>
-            {category === "reviews" &&
-              categoryData?.results?.map((ele: any) => {
-                const review_date = new Date(ele?.created_at);
-                return (
-                  <div
-                    className={`${styles.Review} ${reviewDetail === ele?.id ? styles.ReviewDetail : null}`}
-                    onClick={() =>
-                      setReviewDetail((prev: any) =>
-                        prev !== ele?.id ? ele?.id : "",
-                      )
+          <div className={styles.MovieList}>
+            <>
+              {category === "similar" &&
+                categoryData?.results?.map((ele: any) => {
+                  return (
+                    <MovieCardLarge
+                      data={ele}
+                      media_type={type}
+                      genresMovie={genreListMovie}
+                      genresTv={genreListTv}
+                    />
+                  );
+                })}
+              {(category === "related" || category === "similar") &&
+                categoryData?.results?.length > 0 && (
+                  <ReactPaginate
+                    containerClassName={styles.pagination}
+                    pageClassName={styles.page_item}
+                    activeClassName={styles.paginateActive}
+                    onPageChange={(event) => {
+                      setCurrentPage(event.selected + 1);
+                      console.log({ event });
+                      if (currentPage > totalpages) {
+                        setCurrentPage(totalpages);
+                      }
+                      // window.scrollTo(0, 0);
+                      scrollToTop();
+                    }}
+                    initialPage={0}
+                    pageCount={totalpages}
+                    breakLabel=" ... "
+                    previousLabel={
+                      <AiFillLeftCircle className={styles.paginationIcons} />
                     }
-                  >
-                    <h4>{ele?.author}</h4>
-                    <p>{`${review_date.getDate()} ${monthNames[review_date.getMonth()]} ${review_date.getFullYear()}`}</p>
-                    <p className={styles.rating}>
-                      <FaStar /> {ele?.author_details?.rating}
-                    </p>
-                    <p>{ele?.content}</p>
-                  </div>
-                );
-              })}
-            {category === "reviews" && categoryData?.results?.length === 0 ? (
-              <div className={styles.Review}>
-                <p>No Reviews Found</p>
-              </div>
-            ) : null}
-            {category === "reviews" &&
-              categoryData === undefined &&
-              dummyList.map((ele) => <Skeleton height={200} width={250} />)}
-          </div>
-          <div className={styles.MovieList}>
-            {category === "movie" &&
-              categoryData?.cast?.map((ele: any, ind: any) => {
-                return (
-                  <div className={styles.numberedCard}>
-                    <MovieCardLarge
-                      data={ele}
-                      media_type="movie"
-                      genresMovie={genreListMovie}
-                      genresTv={genreListTv}
-                    />
-                    <span className={styles.number}>{ind + 1}</span>
-                  </div>
-                );
-              })}
-            {category === "movie" &&
-              data?.known_for_department !== "Acting" &&
-              categoryData?.crew?.map((ele: any, ind: any) => {
-                return (
-                  <div className={styles.numberedCard}>
-                    <MovieCardLarge
-                      data={ele}
-                      media_type="movie"
-                      genresMovie={genreListMovie}
-                      genresTv={genreListTv}
-                    />
-                    <span className={styles.number}>{ind + 1}</span>
-                  </div>
-                );
-              })}
-            {category === "movie" &&
+                    nextLabel={
+                      <AiFillRightCircle className={styles.paginationIcons} />
+                    }
+                  />
+                )}
+            </>
+            {category === "similar" && categoryData?.results?.length === 0 && (
+              <p>No Recommendations</p>
+            )}
+            {category === "similar" &&
               categoryData === undefined &&
               dummyList.map((ele) => (
                 <div className={styles.MovieList}>
                   <Skeleton height={150} width={100} />
-                  <Skeleton height={50} width={150} />
-                </div>
-              ))}
-          </div>
-          <div className={styles.MovieList}>
-            {category === "tv" &&
-              categoryData?.cast?.map((ele: any, ind: any) => {
-                return (
-                  <div className={styles.numberedCard}>
-                    <MovieCardLarge
-                      data={ele}
-                      media_type="tv"
-                      genresMovie={genreListMovie}
-                      genresTv={genreListTv}
-                    />
-                    <span className={styles.number}>{ind + 1}</span>
+                  <div>
+                    <Skeleton height={20} width={150} />
+                    <Skeleton height={20} width={150} />
+                    <Skeleton height={20} width={150} />
                   </div>
-                );
-              })}
-            {category === "tv" &&
-              data?.known_for_department !== "Acting" &&
-              categoryData?.crew?.map((ele: any, ind: any) => {
-                return (
-                  <div className={styles.numberedCard}>
-                    <MovieCardLarge
-                      data={ele}
-                      media_type="tv"
-                      genresMovie={genreListMovie}
-                      genresTv={genreListTv}
-                    />
-                    <span className={styles.number}>{ind + 1}</span>
-                  </div>
-                );
-              })}
-            {category === "tv" &&
-              categoryData === undefined &&
-              dummyList.map((ele) => (
-                <div className={styles.MovieList}>
-                  <Skeleton height={150} width={100} />
-                  <Skeleton height={50} width={150} />
                 </div>
               ))}
           </div>
@@ -738,4 +551,4 @@ const MetaDetails = ({ id, type, data }: any) => {
   );
 };
 
-export default MetaDetails;
+export default WatchDetails;

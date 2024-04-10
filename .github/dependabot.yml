@@ -10,6 +10,16 @@ updates:
     schedule:
       interval: "weekly"
 
+  # Maintain dependencies for Rust: Cargo
+  - package-ecosystem: "cargo"
+    labels:
+      - 📦 dependencies
+    directory: "/src-tauri"
+    commit-message:
+      prefix: "chore(deps)[cargo]"
+    schedule:
+      interval: "weekly"
+
   # Maintain dependencies for npm
   - package-ecosystem: "npm"
     labels:

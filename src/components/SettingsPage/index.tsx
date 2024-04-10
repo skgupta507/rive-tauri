@@ -7,6 +7,8 @@ import { usePathname } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/Utils/firebase";
 import { logoutUser } from "@/Utils/firebaseUser";
+import { useRouter } from "next/navigation";
+import { fetchRandom } from "@/Utils/randomdata";
 
 const SettingsPage = ({
   mode,
@@ -18,6 +20,8 @@ const SettingsPage = ({
 }: any) => {
   const [user, setUser] = useState<any>(false);
   const [loading, setLoading] = useState(true);
+  const { push } = useRouter();
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       // console.log({ user });
@@ -37,8 +41,15 @@ const SettingsPage = ({
     if (type === "ascent_color")
       setSettings({ values: { ...prevVal, ascent_color: value } });
   };
+  const handleRandom = async () => {
+    const res = await fetchRandom();
+    console.log({ res });
+    if (res?.type && res?.id) {
+      push(`/detail?type=${res.type}&id=${res.id}`);
+    }
+  };
   return (
-    <div className={`${styles.settingsPage}`}>
+    <div className={`${styles.settingsPage} ${styles.authPage}`}>
       <div className={styles.logo}>
         <img src="/images/logo.svg" alt="logo" />
         <p>Your Personal Streaming Oasis</p>
@@ -61,7 +72,7 @@ const SettingsPage = ({
               <Link href="/login">Login</Link>
               <Link href="/signup">Signup</Link>
             </>
-            <h4 className={styles.profileCard}>Login to syc to cloud</h4>
+            <h4 className={styles.profileCard}>Login to sync to cloud</h4>
           </div>
         )}
         <h1>Appearence</h1>
@@ -126,6 +137,14 @@ const SettingsPage = ({
         </div>
         <h1>App Center</h1>
         <div className={styles.group}>
+          <Link
+            href=""
+            onClick={handleRandom}
+            data-tooltip-id="tooltip"
+            data-tooltip-html="Random Movie/ Tv Show <span class='tooltip-btn'>CTRL + SHIFT + R</span>"
+          >
+            Random
+          </Link>
           <Link
             href="/downloads"
             data-tooltip-id="tooltip"
