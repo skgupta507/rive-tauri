@@ -35,14 +35,16 @@ Your Personal Streaming Oasis.
 
 ## **Features**:
 
-- Created using [NextJS](https://nextjs.org/) framework and [TypeScript](https://www.typescriptlang.org/) and [Tauri](https://tauri.app/)
-- Watchlist and Continue watching feature using **localstorage**
-- Sync to cloud option (firestore), for watchlist
-- Login/ Signup for cloud syncing
-- Signin with email, or google (firebase)
-- Multiple server streaming
-- Great Customization in settings
-- Great UI
+- Developed utilizing the [Next.js](https://nextjs.org/) framework , [TypeScript](https://www.typescriptlang.org/) and [Tauri](https://tauri.app/)
+- Includes Watchlist and Continue Watching features utilizing **local storage**.
+- Offers synchronization to cloud storage (Firestore) for the watchlist.
+- Enables cloud synchronization through Login/Signup functionality.
+- Supports Sign-in with email or Google accounts (Firebase).
+- Facilitates multiple server streaming capabilities.
+- Incorporates a Random Movie/TV Shows option, accessible via `CTRL + SHIFT + R` (globally active).
+- Utilizes server-side APIs for data fetching, ensuring efficient server-side operations.
+- Provides extensive customization options within settings.
+- Features a user-friendly and visually appealing UI.
 <!-- - Download Movies/ TV shows using extensions like FetchV -->
 
 <!-- ## **Word From Developer**:
