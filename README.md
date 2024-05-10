@@ -24,7 +24,8 @@ Your Personal Streaming Oasis.
 
 <div align="left">
  <p>
-
+  
+![Downloads](https://img.shields.io/github/downloads/Developabile/rive-tauri/total)
 ![GitHub repo size](https://img.shields.io/github/repo-size/Developabile/rive-tauri)
 ![Github LOC](https://tokei.rs/b1/github/Developabile/rive-tauri)
 ![Github Files](https://tokei.rs/b1/github/Developabile/rive-tauri?category=files)
