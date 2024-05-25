@@ -1,4 +1,5 @@
 import axios from "axios";
+import { setCache, getCache } from "./clientCache";
 
 interface Fetch {
   requestID: any;
@@ -79,12 +80,28 @@ export default async function axiosFetch({
     genresTv: `${baseURL}?requestID=genresTv&language=${language}`,
     countries: `${baseURL}?requestID=countries&language=${language}`,
     languages: `${baseURL}?requestID=languages`,
+
+    // collections
+    collection: `${baseURL}?requestID=collection&id=${id}`,
+    searchCollection: `${baseURL}?requestID=searchCollection&query=${query}&page=${page}`,
+
+    // withKeywords
+    withKeywordsTv: `${baseURL}?requestID=withKeywordsTv&genreKeywords=${genreKeywords}&language=${language}&sortBy=${sortBy}${year != undefined ? "&year=" + year : ""}${country != undefined ? "&country=" + country : ""}&page=${page}`,
+    withKeywordsMovie: `${baseURL}?requestID=withKeywordsMovie&genreKeywords=${genreKeywords}&language=${language}&sortBy=${sortBy}${year != undefined ? "&year=" + year : ""}${country != undefined ? "&country=" + country : ""}&page=${page}`,
   };
   const final_request = requests[request];
   // console.log({ final_request });
 
+  // client side caching
+  const cacheKey = final_request;
+  const cachedResult = getCache(cacheKey);
+  if (cachedResult) {
+    return await cachedResult;
+  }
+
   try {
     const response = await axios.get(final_request);
+    setCache(cacheKey, response?.data);
     return await response.data; // Return the resolved data from the response
   } catch (error) {
     console.error("Error fetching data:", error);

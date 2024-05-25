@@ -138,6 +138,20 @@ const SettingsPage = ({
         <h1>App Center</h1>
         <div className={styles.group}>
           <Link
+            href="/anime"
+            data-tooltip-id="tooltip"
+            data-tooltip-html="Go to Anime Page"
+          >
+            Anime
+          </Link>
+          <Link
+            href="/kdrama"
+            data-tooltip-id="tooltip"
+            data-tooltip-html="Go to K-Drama Page"
+          >
+            K-Drama
+          </Link>
+          <Link
             href=""
             onClick={handleRandom}
             data-tooltip-id="tooltip"
@@ -151,6 +165,13 @@ const SettingsPage = ({
             data-tooltip-content="Downloads"
           >
             Download
+          </Link>
+          <Link
+            href="/disclaimer"
+            data-tooltip-id="tooltip"
+            data-tooltip-content="Disclaimer"
+          >
+            Disclaimer
           </Link>
           <Link href="mailto:kumarashishranjan4971@hotmail.com">
             Contact Us

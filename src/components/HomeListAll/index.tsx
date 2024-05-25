@@ -6,6 +6,7 @@ import Skeleton from "react-loading-skeleton";
 import MovieCardSmall from "../MovieCardSmall";
 import { getContinueWatching } from "@/Utils/continueWatching";
 import { useInView } from "react-intersection-observer";
+import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 
 const externalImageLoader = ({ src }: { src: string }) =>
   `${process.env.NEXT_PUBLIC_TMBD_IMAGE_URL}${src}`;
@@ -28,6 +29,10 @@ const dummyList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 const HomeListAll = () => {
   const [latestMovie, setLatestMovie] = useState([]);
   const [latestTv, setLatestTv] = useState([]);
+  const [latestKoreanDrama, setLatestKoreanDrama] = useState([]);
+  const [popularKoreanDrama, setPopularKoreanDrama] = useState([]);
+  const [latestAnime, setLatestAnime] = useState([]);
+  const [popularAnime, setPopularAnime] = useState([]);
   const [popularMovie, setPopularMovie] = useState([]);
   const [popularTv, setPopularTv] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,6 +42,18 @@ const HomeListAll = () => {
     triggerOnce: true,
   });
   const [latestTvRef, latestTvInView] = useInView({
+    triggerOnce: true,
+  });
+  const [latestKoreanDramaRef, latestKoreanDramaInView] = useInView({
+    triggerOnce: true,
+  });
+  const [popularKoreanDramaRef, popularKoreanDramaInView] = useInView({
+    triggerOnce: true,
+  });
+  const [latestAnimeRef, latestAnimeInView] = useInView({
+    triggerOnce: true,
+  });
+  const [popularAnimeRef, popularAnimeInView] = useInView({
     triggerOnce: true,
   });
   const [popularMovieRef, popularMovieInView] = useInView({
@@ -138,6 +155,7 @@ const HomeListAll = () => {
     };
     if (latestMovieInView) fetchData();
   }, [latestMovieInView]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -149,6 +167,79 @@ const HomeListAll = () => {
     };
     if (latestTvInView) fetchData();
   }, [latestTvInView]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const lT = await axiosFetch({
+          requestID: "withKeywordsTv",
+          sortBy: "first_air_date.desc",
+          genreKeywords: ",",
+          // genreKeywords: "9840,293016,",
+          country: "KR",
+        });
+        setLatestKoreanDrama(lT.results);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    if (latestKoreanDramaInView) fetchData();
+  }, [latestKoreanDramaInView]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const lT = await axiosFetch({
+          requestID: "withKeywordsTv",
+          sortBy: "vote_count.desc",
+          genreKeywords: ",",
+          // genreKeywords: "9840,",
+          // genreKeywords: "9840,293016,",
+          country: "KR",
+        });
+        setPopularKoreanDrama(lT.results);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    if (popularKoreanDramaInView) fetchData();
+  }, [popularKoreanDramaInView]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const lT = await axiosFetch({
+          requestID: "withKeywordsTv",
+          sortBy: "first_air_date.desc",
+          genreKeywords: "210024,",
+          // genreKeywords: "9840,293016,",
+        });
+        setLatestAnime(lT.results);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    if (latestAnimeInView) fetchData();
+  }, [latestAnimeInView]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const lT = await axiosFetch({
+          requestID: "withKeywordsTv",
+          sortBy: "vote_count.desc",
+          genreKeywords: "210024,",
+          // genreKeywords: "9840,",
+          // genreKeywords: "9840,293016,",
+        });
+        setPopularAnime(lT.results);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    if (popularAnimeInView) fetchData();
+  }, [popularAnimeInView]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -163,6 +254,7 @@ const HomeListAll = () => {
     };
     if (popularMovieInView) fetchData();
   }, [popularMovieInView]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -217,7 +309,30 @@ const HomeListAll = () => {
     <div className={styles.HomeListAll}>
       {recommendations.length > 0 ? (
         <>
-          <h1>Recommendation</h1>
+          <h1>
+            Recommendation
+            <div>
+              <MdChevronLeft
+                onClick={() => {
+                  document
+                    .querySelectorAll(`.${styles.HomeListSection}`)[0]
+                    .scrollBy(-700, 0);
+                }}
+                data-tooltip-id="tooltip"
+                data-tooltip-content="Swipe Left"
+              />
+              swipe
+              <MdChevronRight
+                onClick={() => {
+                  document
+                    .querySelectorAll(`.${styles.HomeListSection}`)[0]
+                    .scrollBy(700, 0);
+                }}
+                data-tooltip-id="tooltip"
+                data-tooltip-content="Swipe Right"
+              />
+            </div>
+          </h1>
           <div
             className={styles.HomeListSection}
             data-tooltip-id="tooltip"
@@ -236,9 +351,32 @@ const HomeListAll = () => {
           </div>
         </>
       ) : null}
-      <h1 ref={latestMovieRef}>Latest Movies</h1>
+      <h1 ref={latestMovieRef}>
+        Latest Movies
+        <div>
+          <MdChevronLeft
+            onClick={() => {
+              document
+                .querySelectorAll(`.${styles.HomeListSection}`)
+                [recommendations.length > 0 ? 1 : 0].scrollBy(-700, 0);
+            }}
+            data-tooltip-id="tooltip"
+            data-tooltip-content="Swipe Left"
+          />
+          swipe
+          <MdChevronRight
+            onClick={() => {
+              document
+                .querySelectorAll(`.${styles.HomeListSection}`)
+                [recommendations.length > 0 ? 1 : 0].scrollBy(700, 0);
+            }}
+            data-tooltip-id="tooltip"
+            data-tooltip-content="Swipe Right"
+          />
+        </div>
+      </h1>
       <div className={styles.HomeListSection}>
-        {latestMovie.map((ele) => {
+        {latestMovie?.map((ele) => {
           return <MovieCardSmall data={ele} media_type="movie" />;
         })}
         {latestMovie?.length === 0 &&
@@ -246,9 +384,32 @@ const HomeListAll = () => {
             <Skeleton className={styles.loading} key={i} />
           ))}
       </div>
-      <h1 ref={latestTvRef}>Latest TV Shows</h1>
+      <h1 ref={latestTvRef}>
+        Latest TV Shows
+        <div>
+          <MdChevronLeft
+            onClick={() => {
+              document
+                .querySelectorAll(`.${styles.HomeListSection}`)
+                [recommendations.length > 0 ? 2 : 1].scrollBy(-700, 0);
+            }}
+            data-tooltip-id="tooltip"
+            data-tooltip-content="Swipe Left"
+          />
+          swipe
+          <MdChevronRight
+            onClick={() => {
+              document
+                .querySelectorAll(`.${styles.HomeListSection}`)
+                [recommendations.length > 0 ? 2 : 1].scrollBy(700, 0);
+            }}
+            data-tooltip-id="tooltip"
+            data-tooltip-content="Swipe Right"
+          />
+        </div>
+      </h1>
       <div className={styles.HomeListSection}>
-        {latestTv.map((ele) => {
+        {latestTv?.map((ele) => {
           return <MovieCardSmall data={ele} media_type="tv" />;
         })}
         {latestTv?.length === 0 &&
@@ -256,9 +417,164 @@ const HomeListAll = () => {
             <Skeleton className={styles.loading} key={i} />
           ))}
       </div>
-      <h1 ref={popularMovieRef}>Popular Movies</h1>
+      <h1 ref={latestKoreanDramaRef}>
+        Latest K-Dramas
+        <div>
+          <MdChevronLeft
+            onClick={() => {
+              document
+                .querySelectorAll(`.${styles.HomeListSection}`)
+                [recommendations.length > 0 ? 3 : 2].scrollBy(-700, 0);
+            }}
+            data-tooltip-id="tooltip"
+            data-tooltip-content="Swipe Left"
+          />
+          swipe
+          <MdChevronRight
+            onClick={() => {
+              document
+                .querySelectorAll(`.${styles.HomeListSection}`)
+                [recommendations.length > 0 ? 3 : 2].scrollBy(700, 0);
+            }}
+            data-tooltip-id="tooltip"
+            data-tooltip-content="Swipe Right"
+          />
+        </div>
+      </h1>
       <div className={styles.HomeListSection}>
-        {popularMovie.map((ele) => {
+        {latestKoreanDrama?.map((ele) => {
+          return <MovieCardSmall data={ele} media_type="tv" />;
+        })}
+        {latestKoreanDrama?.length === 0 &&
+          dummyList.map((ele, i) => (
+            <Skeleton className={styles.loading} key={i} />
+          ))}
+      </div>
+      <h1 ref={popularKoreanDramaRef}>
+        Popular K-Dramas
+        <div>
+          <MdChevronLeft
+            onClick={() => {
+              document
+                .querySelectorAll(`.${styles.HomeListSection}`)
+                [recommendations.length > 0 ? 4 : 3].scrollBy(-700, 0);
+            }}
+            data-tooltip-id="tooltip"
+            data-tooltip-content="Swipe Left"
+          />
+          swipe
+          <MdChevronRight
+            onClick={() => {
+              document
+                .querySelectorAll(`.${styles.HomeListSection}`)
+                [recommendations.length > 0 ? 4 : 3].scrollBy(700, 0);
+            }}
+            data-tooltip-id="tooltip"
+            data-tooltip-content="Swipe Right"
+          />
+        </div>
+      </h1>
+      <div className={styles.HomeListSection}>
+        {popularKoreanDrama?.map((ele) => {
+          return <MovieCardSmall data={ele} media_type="tv" />;
+        })}
+        {popularKoreanDrama?.length === 0 &&
+          dummyList.map((ele, i) => (
+            <Skeleton className={styles.loading} key={i} />
+          ))}
+      </div>
+      <h1 ref={latestAnimeRef}>
+        Latest Anime
+        <div>
+          <MdChevronLeft
+            onClick={() => {
+              document
+                .querySelectorAll(`.${styles.HomeListSection}`)
+                [recommendations.length > 0 ? 5 : 4].scrollBy(-700, 0);
+            }}
+            data-tooltip-id="tooltip"
+            data-tooltip-content="Swipe Left"
+          />
+          swipe
+          <MdChevronRight
+            onClick={() => {
+              document
+                .querySelectorAll(`.${styles.HomeListSection}`)
+                [recommendations.length > 0 ? 5 : 4].scrollBy(700, 0);
+            }}
+            data-tooltip-id="tooltip"
+            data-tooltip-content="Swipe Right"
+          />
+        </div>
+      </h1>
+      <div className={styles.HomeListSection}>
+        {latestAnime?.map((ele) => {
+          return <MovieCardSmall data={ele} media_type="tv" />;
+        })}
+        {latestAnime?.length === 0 &&
+          dummyList.map((ele, i) => (
+            <Skeleton className={styles.loading} key={i} />
+          ))}
+      </div>
+      <h1 ref={popularAnimeRef}>
+        Popular Anime
+        <div>
+          <MdChevronLeft
+            onClick={() => {
+              document
+                .querySelectorAll(`.${styles.HomeListSection}`)
+                [recommendations.length > 0 ? 6 : 5].scrollBy(-700, 0);
+            }}
+            data-tooltip-id="tooltip"
+            data-tooltip-content="Swipe Left"
+          />
+          swipe
+          <MdChevronRight
+            onClick={() => {
+              document
+                .querySelectorAll(`.${styles.HomeListSection}`)
+                [recommendations.length > 0 ? 6 : 5].scrollBy(700, 0);
+            }}
+            data-tooltip-id="tooltip"
+            data-tooltip-content="Swipe Right"
+          />
+        </div>
+      </h1>
+      <div className={styles.HomeListSection}>
+        {popularAnime?.map((ele) => {
+          return <MovieCardSmall data={ele} media_type="tv" />;
+        })}
+        {popularAnime?.length === 0 &&
+          dummyList.map((ele, i) => (
+            <Skeleton className={styles.loading} key={i} />
+          ))}
+      </div>
+      <h1 ref={popularMovieRef}>
+        Popular Movies
+        <div>
+          <MdChevronLeft
+            onClick={() => {
+              document
+                .querySelectorAll(`.${styles.HomeListSection}`)
+                [recommendations.length > 0 ? 7 : 6].scrollBy(-700, 0);
+            }}
+            data-tooltip-id="tooltip"
+            data-tooltip-content="Swipe Left"
+          />
+          swipe
+          <MdChevronRight
+            onClick={() => {
+              document
+                .querySelectorAll(`.${styles.HomeListSection}`)
+                [recommendations.length > 0 ? 7 : 6].scrollBy(700, 0);
+            }}
+            data-tooltip-id="tooltip"
+            data-tooltip-content="Swipe Right"
+          />
+        </div>
+      </h1>
+      <div className={styles.HomeListSection}>
+        {popularMovie?.map((ele) => {
           return <MovieCardSmall data={ele} media_type="movie" />;
         })}
         {popularMovie?.length === 0 &&
@@ -266,9 +582,32 @@ const HomeListAll = () => {
             <Skeleton className={styles.loading} key={i} />
           ))}
       </div>
-      <h1 ref={popularTvRef}>Popular TV Shows</h1>
+      <h1 ref={popularTvRef}>
+        Popular TV Shows
+        <div>
+          <MdChevronLeft
+            onClick={() => {
+              document
+                .querySelectorAll(`.${styles.HomeListSection}`)
+                [recommendations.length > 0 ? 8 : 7].scrollBy(-700, 0);
+            }}
+            data-tooltip-id="tooltip"
+            data-tooltip-content="Swipe Left"
+          />
+          swipe
+          <MdChevronRight
+            onClick={() => {
+              document
+                .querySelectorAll(`.${styles.HomeListSection}`)
+                [recommendations.length > 0 ? 8 : 7].scrollBy(700, 0);
+            }}
+            data-tooltip-id="tooltip"
+            data-tooltip-content="Swipe Right"
+          />
+        </div>
+      </h1>
       <div className={styles.HomeListSection}>
-        {popularTv.map((ele) => {
+        {popularTv?.map((ele) => {
           return <MovieCardSmall data={ele} media_type="tv" />;
         })}
         {popularTv?.length === 0 &&

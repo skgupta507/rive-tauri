@@ -1,44 +1,42 @@
 import { useState, useEffect, useRef } from "react";
 import axiosFetch from "@/Utils/fetchBackend";
+// import styles from "@/components/CategorywisePage/style.module.scss";
 import styles from "@/styles/Search.module.scss";
+import MovieCardSmall from "@/components/MovieCardSmall";
 import ReactPaginate from "react-paginate"; // for pagination
-import { AiFillLeftCircle, AiFillRightCircle } from "react-icons/ai";
-import MovieCardLarge from "@/components/MovieCardLarge";
 import Skeleton from "react-loading-skeleton";
 import NProgress from "nprogress";
+import { AiFillLeftCircle, AiFillRightCircle } from "react-icons/ai";
+import CollectionIDs from "@/assets/collection_ids.json";
 // import MoviePoster from '@/components/MoviePoster';
 
 const dummyList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-const SearchPage = ({ categoryType }: any) => {
-  const [query, setQuery] = useState("");
+const Collections = ({ categoryType }: any) => {
+  const [ids, setids] = useState<any>([]);
   const [data, setData] = useState<any>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalpages, setTotalpages] = useState(1);
+  const [currentPage, setCurrentPage] = useState<any>(1);
+  const [totalpages, setTotalpages] = useState(
+    Math.floor(CollectionIDs?.length / 20),
+  );
+  const [trigger, setTrigger] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [genreListMovie, setGenreListMovie] = useState<any>([]);
-  const [genreListTv, setGenreListTv] = useState<any>([]);
+  const [searchQuery, setSearchQuery] = useState<any>(null);
   const [isSearchBarFocused, setIsSearchBarFocused] = useState(false);
   const searchBar: any = useRef(null);
-
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const gM = await axiosFetch({ requestID: "genresMovie" });
-        const gT = await axiosFetch({ requestID: "genresTv" });
-        setGenreListMovie(gM.genres);
-        setGenreListTv(gT.genres);
-      } catch (error) {
-        console.error("Error fetching genres:", error);
-      }
-    };
-    fetchData();
-    searchBar?.current.focus();
+    if (loading) {
+      NProgress.start();
+    } else NProgress.done(false);
+  }, [loading]);
 
-    // focus the input on "/"
+  // focus the input on "/"
+  useEffect(() => {
     const handleKeyDown = (event: any) => {
+      // console.log(event.key);
       if (event.key === "/") {
         event.preventDefault();
         searchBar?.current.focus();
+        // setSearchQuery((prev: any) => prev + "/");
       } else if (event.key === "Escape") {
         event.preventDefault();
         searchBar?.current.blur();
@@ -51,6 +49,48 @@ const SearchPage = ({ categoryType }: any) => {
     };
   }, []);
   useEffect(() => {
+    setLoading(true);
+    // setData([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    const fetchData = async () => {
+      let arr: any = [];
+      try {
+        for (
+          let i = (currentPage - 1) * 20;
+          i < currentPage * 20 && i < CollectionIDs?.length - 1;
+          i++
+        ) {
+          const data = await axiosFetch({
+            requestID: `collection`,
+            id: JSON.stringify(CollectionIDs[i]?.id),
+          });
+          if (data !== undefined) await arr.push(data);
+          console.log({ arr });
+          // setLoading(false);
+        }
+        // if (ids.length === 0 || ids === null || ids === undefined)
+        //   setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      }
+      return arr;
+    };
+    if (searchQuery === null || searchQuery?.length <= 2)
+      fetchData().then((res) => {
+        console.log({ res });
+        setData(res);
+        setLoading(false);
+      });
+  }, [ids, currentPage, searchQuery]);
+  useEffect(() => {
+    if (searchQuery === "" || searchQuery === null) {
+      setCurrentPage(1);
+      setTotalpages(Math.floor(CollectionIDs?.length / 20));
+    } else {
+      setCurrentPage(1);
+    }
+  }, [searchQuery]);
+  useEffect(() => {
     let debounceTimer: NodeJS.Timeout;
     const fetchData = async (mode: any) => {
       setLoading(true);
@@ -59,9 +99,9 @@ const SearchPage = ({ categoryType }: any) => {
         let data;
         if (mode) {
           data = await axiosFetch({
-            requestID: `searchMulti`,
+            requestID: `searchCollection`,
             page: currentPage,
-            query: query,
+            query: searchQuery,
           });
           // console.log();
           if (data.page > data.total_pages) {
@@ -72,10 +112,6 @@ const SearchPage = ({ categoryType }: any) => {
             return;
           }
           setTotalpages(data.total_pages > 500 ? 500 : data.total_pages);
-        } else {
-          data = await axiosFetch({ requestID: `trending` });
-          setCurrentPage(1);
-          setTotalpages(1);
         }
         setData(data.results);
         setLoading(false);
@@ -86,37 +122,26 @@ const SearchPage = ({ categoryType }: any) => {
     const debounceSearch = () => {
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
-        if (query.length >= 3) {
+        if (searchQuery.length >= 3) {
           fetchData(true);
         }
       }, 600);
     };
-    if (query?.length > 2) debounceSearch();
-    if (query?.length === 0) fetchData(false);
+    if (searchQuery?.length > 2) debounceSearch();
     return () => clearTimeout(debounceTimer);
-  }, [query, currentPage]);
-
-  useEffect(() => {
-    if (loading) {
-      NProgress.start();
-    } else NProgress.done(false);
-  }, [loading]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [query]);
+  }, [searchQuery, currentPage]);
 
   return (
     <div className={styles.MoviePage}>
-      {/* <h1>Search</h1> */}
+      {/* <h1>Collections</h1> */}
       <div className={styles.InputWrapper}>
         <input
           ref={searchBar}
           type="text"
           className={styles.searchInput}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Please enter at least 3 characters to search..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Please enter at least 3 characters to search collections...."
           onFocus={() => setIsSearchBarFocused(true)}
           onBlur={() => setIsSearchBarFocused(false)}
           // data-tooltip-id="tooltip"
@@ -130,44 +155,28 @@ const SearchPage = ({ categoryType }: any) => {
           )}
         </div>
       </div>
-      {query.length > 2 ? (
+      {searchQuery?.length > 2 ? (
         <h1>
-          showing result for <span className={styles.serachQuery}>{query}</span>
+          showing collections for{" "}
+          <span className={styles.serachQuery}>{searchQuery}</span>
         </h1>
       ) : (
         <h1>
-          Top Searches <span className={styles.serachQuery}>today</span>
+          All Collections <span className={styles.serachQuery}></span>
         </h1>
       )}
       <div className={styles.movieList}>
-        {genreListMovie?.length > 0 &&
-          genreListTv?.length > 0 &&
-          data.map((ele: any) => {
-            return (
-              <MovieCardLarge
-                data={ele}
-                media_type={categoryType}
-                genresMovie={genreListMovie}
-                genresTv={genreListTv}
-              />
-            );
-          })}
-        {query.length > 2 && data?.length === 0 ? <h1>No Data Found</h1> : null}
-        {query.length > 2 && data === undefined
-          ? dummyList.map((ele) => <Skeleton className={styles.loading} />)
-          : null}
-        {genreListMovie?.length === 0 || genreListTv?.length === 0
-          ? dummyList.map((ele: any) => {
-              return (
-                <MovieCardLarge
-                  data={ele}
-                  media_type={categoryType}
-                  genresMovie={genreListMovie}
-                  genresTv={genreListTv}
-                />
-              );
-            })
-          : null}
+        {data.map((ele: any) => {
+          return <MovieCardSmall data={ele} media_type={"collection"} />;
+        })}
+        {searchQuery?.length > 2 && data?.length === 0 ? (
+          <h1>No Data Found</h1>
+        ) : null}
+        {(searchQuery === null || searchQuery === "") &&
+          data?.length === 0 &&
+          dummyList.map((ele) => <Skeleton className={styles.loading} />)}
+        {/* {data?.total_results === 0 &&
+          <h1>No Data Found</h1>} */}
       </div>
       <ReactPaginate
         containerClassName={styles.pagination}
@@ -187,9 +196,8 @@ const SearchPage = ({ categoryType }: any) => {
         previousLabel={<AiFillLeftCircle className={styles.paginationIcons} />}
         nextLabel={<AiFillRightCircle className={styles.paginationIcons} />}
       />
-      ;
     </div>
   );
 };
 
-export default SearchPage;
+export default Collections;
