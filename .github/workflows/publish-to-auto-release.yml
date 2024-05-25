@@ -41,11 +41,21 @@ jobs:
       - name: "Create env file"
         run: |
           touch .env.local
+          echo NEXT_PUBLIC_TMDB_API=${{ secrets.NEXT_PUBLIC_TMDB_API }} >> .env.local
           echo NEXT_PUBLIC_TMDB_API_KEY=${{ secrets.NEXT_PUBLIC_TMDB_API_KEY }} >> .env.local
           echo NEXT_PUBLIC_TMBD_IMAGE_URL=${{ secrets.NEXT_PUBLIC_TMBD_IMAGE_URL }} >> .env.local
+          echo NEXT_PUBLIC_PROVIDER_URL=${{ secrets.NEXT_PUBLIC_PROVIDER_URL }} >> .env.local
           echo NEXT_PUBLIC_STREAM_URL_AGG=${{ secrets.NEXT_PUBLIC_STREAM_URL_AGG }} >> .env.local
           echo NEXT_PUBLIC_STREAM_URL_MULTI=${{ secrets.NEXT_PUBLIC_STREAM_URL_MULTI }} >> .env.local
           echo NEXT_PUBLIC_STREAM_URL_SUP=${{ secrets.NEXT_PUBLIC_STREAM_URL_SUP }} >> .env.local
+          echo NEXT_PUBLIC_STREAM_URL_VID=${{ secrets.NEXT_PUBLIC_STREAM_URL_VID }} >> .env.local
+          echo NEXT_PUBLIC_STREAM_URL_PRO=${{ secrets.NEXT_PUBLIC_STREAM_URL_PRO }} >> .env.local
+          echo NEXT_PUBLIC_STREAM_URL_EMB=${{ secrets.NEXT_PUBLIC_STREAM_URL_EMB }} >> .env.local
+          echo NEXT_PUBLIC_STREAM_URL_CLUB=${{ secrets.NEXT_PUBLIC_STREAM_URL_CLUB }} >> .env.local
+          echo NEXT_PUBLIC_STREAM_URL_SMASH=${{ secrets.NEXT_PUBLIC_STREAM_URL_SMASH }} >> .env.local
+          echo NEXT_PUBLIC_STREAM_URL_ONE=${{ secrets.NEXT_PUBLIC_STREAM_URL_ONE }} >> .env.local
+          echo NEXT_PUBLIC_STREAM_URL_ANY=${{ secrets.NEXT_PUBLIC_STREAM_URL_ANY }} >> .env.local
+          echo NEXT_PUBLIC_STREAM_URL_WEB=${{ secrets.NEXT_PUBLIC_STREAM_URL_WEB }} >> .env.local
           echo NEXT_PUBLIC_FB_API_KEY=${{ secrets.NEXT_PUBLIC_FB_API_KEY }} >> .env.local
           echo NEXT_PUBLIC_FB_AUTH_DOMAIN=${{ secrets.NEXT_PUBLIC_FB_AUTH_DOMAIN }} >> .env.local
           echo NEXT_PUBLIC_FB_PROJECT_ID=${{ secrets.NEXT_PUBLIC_FB_PROJECT_ID }} >> .env.local
