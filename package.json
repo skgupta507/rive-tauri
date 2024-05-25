@@ -10,9 +10,12 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "artplayer": "^5.1.1",
+    "artplayer-plugin-hls-quality": "^2.0.0",
     "axios": "^1.6.8",
     "firebase": "^10.9.0",
     "framer-motion": "^11.0.20",
+    "hls.js": "^1.5.8",
     "next": "14.1.4",
     "nprogress": "^0.2.0",
     "react": "^18.2.0",
@@ -28,7 +31,6 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.5.11",
-    "@types/crypto-js": "^4.2.2",
     "@types/node": "^20",
     "@types/nprogress": "^0.2.3",
     "@types/react": "^18",
