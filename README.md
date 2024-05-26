@@ -44,8 +44,7 @@ Your Personal Streaming Oasis.
 - Facilitates **multiple server streaming** capabilities.
 - Allows for **downloading of Movies/TV shows** using extensions like FetchV.
 - Incorporates a **Random Movie/TV Shows** option, accessible via `CTRL + SHIFT + R` (globally active).
-- Utilizes `server-side APIs` for data fetching, ensuring efficient server-side operations across **all ISPs**.
-- Implements a self-created `caching system` to **cache all API calls** on the server, significantly **enhancing data fetching speed** and overall website performance.
+- Utilizes `client-side APIs` for data fetching.
 - Implements a client-side caching system utilizing **session storage**.
 - Provides extensive customization options within **settings**.
 - Features a user-friendly and **visually appealing UI**.
@@ -64,6 +63,14 @@ Your Personal Streaming Oasis.
 > - on Mobile : [AVDP](https://play.google.com/store/apps/details?id=videoplayer.videodownloader.downloader)
 >
 > [The Source](https://www.reddit.com/r/DataHoarder/comments/qgne3i/how_to_download_videos_from_vidsrcme/) -->
+
+## **Word From Developer**
+
+> [!IMPORTANT]
+>
+> The project uses **TMDB**.  
+> If the app doesn't load any data, the issue may be your ISP has blocked TMDB.  
+> So change your ISP, or use any wifi
 
 ## **Tech Stack**
 

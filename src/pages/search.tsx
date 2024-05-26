@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import axiosFetch from "@/Utils/fetchBackend";
+import axiosFetch from "@/Utils/fetch";
 import styles from "@/styles/Search.module.scss";
 import ReactPaginate from "react-paginate"; // for pagination
 import { AiFillLeftCircle, AiFillRightCircle } from "react-icons/ai";

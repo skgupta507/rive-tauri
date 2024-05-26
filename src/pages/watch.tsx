@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { IoReturnDownBack } from "react-icons/io5";
 import { FaForwardStep, FaBackwardStep } from "react-icons/fa6";
 import { BsHddStack, BsHddStackFill } from "react-icons/bs";
-import axiosFetch from "@/Utils/fetchBackend";
+import axiosFetch from "@/Utils/fetch";
 import WatchDetails from "@/components/WatchDetails";
 import Player from "@/components/Artplayer";
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axiosFetch from "@/Utils/fetchBackend";
+import axiosFetch from "@/Utils/fetch";
 // import styles from "@/components/CategorywisePage/style.module.scss";
 import styles from "@/styles/Search.module.scss";
 import MovieCardSmall from "@/components/MovieCardSmall";

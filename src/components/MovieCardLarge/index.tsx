@@ -3,7 +3,7 @@ import styles from "./style.module.scss";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import Skeleton from "react-loading-skeleton";
-import axiosFetch from "@/Utils/fetchBackend";
+import axiosFetch from "@/Utils/fetch";
 
 // react-lazy-load-image-component
 import { LazyLoadImage } from "react-lazy-load-image-component";
