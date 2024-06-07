@@ -56,7 +56,7 @@ export default async function axiosFetch({
     tvData: `${baseURL}?id=${id}&requestID=tvData&language=${language}`,
     personData: `${baseURL}?id=${id}&requestID=personData&language=${language}`,
     movieVideos: `${baseURL}?id=${id}&requestID=movieVideos&language=${language}`,
-    tvVideos: `${baseURL}?id=${id}/&?requestID=tvVideos&language=${language}`,
+    tvVideos: `${baseURL}?id=${id}&requestID=tvVideos&language=${language}`,
     movieImages: `${baseURL}?id=${id}&requestID=movieImages`,
     tvImages: `${baseURL}?id=${id}&requestID=tvImages`,
     personImages: `${baseURL}?id=${id}&requestID=personImages`,
@@ -88,21 +88,30 @@ export default async function axiosFetch({
     // withKeywords
     withKeywordsTv: `${baseURL}?requestID=withKeywordsTv&genreKeywords=${genreKeywords}&language=${language}&sortBy=${sortBy}${year != undefined ? "&year=" + year : ""}${country != undefined ? "&country=" + country : ""}&page=${page}`,
     withKeywordsMovie: `${baseURL}?requestID=withKeywordsMovie&genreKeywords=${genreKeywords}&language=${language}&sortBy=${sortBy}${year != undefined ? "&year=" + year : ""}${country != undefined ? "&country=" + country : ""}&page=${page}`,
+
+    // provider
+    movieVideoProvider: `${baseURL}?requestID=movieVideoProvider&id=${id}`,
+    tvVideoProvider: `${baseURL}?requestID=tvVideoProvider&id=${id}&season=${season}&episode=${episode}`,
   };
   const final_request = requests[request];
   // console.log({ final_request });
 
   // client side caching
   const cacheKey = final_request;
-  const cachedResult = getCache(cacheKey);
-  if (cachedResult) {
+  const cachedResult = await getCache(cacheKey);
+  if (
+    cachedResult &&
+    cachedResult !== null &&
+    cachedResult !== undefined &&
+    cachedResult !== ""
+  ) {
     return await cachedResult;
   }
 
   try {
     const response = await axios.get(final_request);
-    setCache(cacheKey, response?.data);
-    return await response.data; // Return the resolved data from the response
+    if (response?.data?.data !== null) setCache(cacheKey, response?.data);
+    return await response?.data; // Return the resolved data from the response
   } catch (error) {
     console.error("Error fetching data:", error);
     // Handle errors appropriately (e.g., throw a custom error or return null)

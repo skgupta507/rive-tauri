@@ -45,7 +45,7 @@ Your Personal Streaming Oasis.
 - Allows for **downloading of Movies/TV shows** using extensions like FetchV.
 - Incorporates a **Random Movie/TV Shows** option, accessible via `CTRL + SHIFT + R` (globally active).
 - Utilizes `client-side APIs` for data fetching.
-- Implements a client-side caching system utilizing **session storage**.
+- Implements a client-side caching system utilizing **cache storage**.
 - Provides extensive customization options within **settings**.
 - Features a user-friendly and **visually appealing UI**.
 - **`Ad-Free Streaming/Download`**: Leverages scrapers for ad-free streaming and downloading.
