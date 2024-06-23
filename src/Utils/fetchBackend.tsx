@@ -92,6 +92,10 @@ export default async function axiosFetch({
     // provider
     movieVideoProvider: `${baseURL}?requestID=movieVideoProvider&id=${id}`,
     tvVideoProvider: `${baseURL}?requestID=tvVideoProvider&id=${id}&season=${season}&episode=${episode}`,
+
+    // EXTERNAL provider
+    movieExternalVideoProvider: `${baseURL}?requestID=movieExternalVideoProvider&id=${id}`,
+    tvExternalVideoProvider: `${baseURL}?requestID=tvExternalVideoProvider&id=${id}&season=${season}&episode=${episode}`,
   };
   const final_request = requests[request];
   // console.log({ final_request });
@@ -110,7 +114,7 @@ export default async function axiosFetch({
 
   try {
     const response = await axios.get(final_request);
-    if (response?.data?.data !== null) setCache(cacheKey, response?.data);
+    if (response?.data?.data !== null && response?.data?.data !== "") setCache(cacheKey, response?.data);
     return await response?.data; // Return the resolved data from the response
   } catch (error) {
     console.error("Error fetching data:", error);
