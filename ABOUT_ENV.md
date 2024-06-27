@@ -67,6 +67,15 @@ And if you are going to create your own website, then I would recommend to go th
 They have created a list of services, but some may have stopped working, still you will get working ones also.  
 If you do some researching, then you will find the right services here.
 
+## 4. Vidsrc Scrapper API
+
+```.env
+NEXT_PUBLIC_PROVIDER_URL=
+NEXT_PUBLIC_EXTERNAL_PROVIDER_URL=
+```
+
+You can find the api, if you search for **vidsrc scrappers**, here we are using a 3rd party API(not ours) which scrapes vidsrc.to and vidsrc.me
+
 If there are anymore env vars left, give them any random values, as they were used in dev only and not in prod.
 
 ## **Disclaimer**
