@@ -27,9 +27,11 @@ Your Personal Streaming Oasis.
   
 ![Downloads](https://img.shields.io/github/downloads/Developabile/rive-tauri/total)
 ![GitHub repo size](https://img.shields.io/github/repo-size/Developabile/rive-tauri)
-![Github LOC](https://tokei.rs/b1/github/Developabile/rive-tauri)
-![Github Files](https://tokei.rs/b1/github/Developabile/rive-tauri?category=files)
+![Github Files](https://img.shields.io/github/directory-file-count/Developabile/rive-tauri)
+<!-- ![Github LOC](https://tokei.rs/b1/github/Developabile/rive-tauri) -->
 [![publish](https://github.com/Developabile/rive-tauri/actions/workflows/publish-to-auto-release.yml/badge.svg?branch=release)](https://github.com/Developabile/rive-tauri/actions/workflows/publish-to-auto-release.yml)
+![Github License](https://img.shields.io/github/license/Developabile/rive-tauri)
+![Github Release](https://img.shields.io/github/v/release/Developabile/rive-tauri)
 
  </p>
 </div>
