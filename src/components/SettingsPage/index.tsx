@@ -183,6 +183,9 @@ const SettingsPage = ({
           <Link href={"https://github.com/Developabile/rive-next"}>
             <FaGithub /> Github
           </Link>
+          <Link href={"https://discord.gg/6xJmJja8fV"}>
+            <FaDiscord /> Discord
+          </Link>
           <Link href={"/"}>
             <FaGlobe /> Website
           </Link>

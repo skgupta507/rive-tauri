@@ -32,6 +32,9 @@ const Watch = () => {
   const [nonEmbedSourcesIndex, setNonEmbedSourcesIndex] = useState<any>("");
   const [nonEmbedSources, setNonEmbedSources] = useState<any>("");
   const [nonEmbedCaptions, setnonEmbedCaptions] = useState<any>();
+  const [nonEmbedVideoProviders, setNonEmbedVideoProviders] = useState([]);
+  const [nonEmbedSourcesNotFound, setNonEmbedSourcesNotFound] =
+    useState<any>(false);
   // const [nonEmbedFormat, setnonEmbedFormat] = useState<any>();
   const nextBtn: any = useRef(null);
   const backBtn: any = useRef(null);
@@ -165,98 +168,91 @@ const Watch = () => {
   useEffect(() => {
     let autoEmbedMode: NodeJS.Timeout;
     if (embedMode === false && id !== undefined && id !== null) {
-      // const provider = process.env.NEXT_PUBLIC_PROVIDER_URL;
-      // fetch(
-      //   type === "movie"
-      //     ? `${provider}/movie/${id}`
-      //     : `${provider}/tv/${id}/${season}/${episode}`,
-      // )
-      //   .then((req) => req.json())
-      //   .then((res: any) => {
-      //     // res.result.sources.map((ele: any) => {
-      //     //   if (typeof ele === "object" && ele !== null && ele?.url !== null) {
-      //     //     fetch(ele.url)
-      //     //       .then((i) => i.text())
-      //     //       .then((r) => {
-      //     //         setNonEmbedURL(ele.url);
-      //     //         clearTimeout(autoEmbedMode);
-      //     //       })
-      //     //       .catch((err: any) => {
-      //     //         autoEmbedMode = setTimeout(() => {
-      //     //           setEmbedMode(true);
-      //     //         }, 10000);
-      //     //       });
-      //     //   } else {
-      //     //     autoEmbedMode = setTimeout(() => {
-      //     //       setEmbedMode(true);
-      //     //     }, 10000);
-      //     //   }
-      //     // });
-      //     if (res?.data?.sources?.length > 0) {
-      //       setNonEmbedSources(res?.data?.sources);
-      //       res?.data?.sources?.length > 0
-      //         ? setNonEmbedURL(res?.data?.sources[0]?.url)
-      //         : null;
-      //       setnonEmbedCaptions(res?.data?.captions);
-      //       setnonEmbedFormat(res?.data?.format);
-      //       clearTimeout(autoEmbedMode);
-      //     } else {
-      //       autoEmbedMode = setTimeout(() => {
-      //         setEmbedMode(true);
-      //       }, 10000);
-      //     }
-      //   })
-      //   .catch((err: any) => {
-      //     console.error(err);
-      //     setEmbedMode(true);
-      //   });
       const fetch = async () => {
-        const res: any = { sources: [] };
-        const res1: any = await axiosFetch({
-          requestID: `${type}ExternalVideoProvider`,
-          id: id,
-          season: season,
-          episode: episode,
+        const providers: any = await axiosFetch({
+          requestID: `VideoProviderServices`,
         });
-        const res2: any = await axiosFetch({
-          requestID: `${type}VideoProvider`,
-          id: id,
-          season: season,
-          episode: episode,
-        });
-        if (res2?.data?.sources?.length > 0) {
-          res2?.data?.sources?.map((ele: any) => {
-            res["sources"].push(ele);
-          });
-          res["thumbnails"] = res2?.data?.thumbnails;
-          res["captions"] = res2?.data?.captions;
-          res["format"] = res2?.data?.format;
+        // console.log({ providers });
+        setNonEmbedVideoProviders(
+          providers?.data?.map((ele: any) => {
+            return {
+              name: ele,
+              status: "available",
+            };
+          }),
+        );
+        const res: any = { sources: [], captions: [] };
+        for (const ele of providers?.data || []) {
+          setNonEmbedVideoProviders((prevProviders: any) =>
+            prevProviders.map((provider: any) => {
+              if (provider.name === ele) {
+                return {
+                  ...provider,
+                  status: "fetching",
+                };
+              }
+              return provider;
+            }),
+          );
+          try {
+            const tempRes: any = await axiosFetch({
+              requestID: `${type}VideoProvider`,
+              id: id,
+              season: season,
+              episode: episode,
+              service: ele,
+            });
+            console.log({ tempRes });
+
+            tempRes?.data?.sources?.forEach((source: any) => {
+              res.sources.push(source);
+            });
+            tempRes?.data?.captions?.forEach((caption: any) => {
+              res.captions.push(caption);
+            });
+
+            setNonEmbedVideoProviders((prevProviders: any) =>
+              prevProviders.map((provider: any) => {
+                if (provider.name === ele) {
+                  return {
+                    ...provider,
+                    status:
+                      tempRes?.data?.sources?.length > 0 ? "success" : "error",
+                  };
+                }
+                return provider;
+              }),
+            );
+          } catch (error) {
+            console.error(`Error fetching data for provider ${ele}:`, error);
+            setNonEmbedVideoProviders((prevProviders: any) =>
+              prevProviders.map((provider: any) => {
+                if (provider.name === ele) {
+                  return {
+                    ...provider,
+                    status: "error",
+                  };
+                }
+                return provider;
+              }),
+            );
+          }
         }
-        res1?.sources?.map((ele: any) => {
-          let temp: any = {};
-          temp["quality"] = ele?.label;
-          temp["url"] = ele?.file;
-          temp["source"] = "Febbox";
-          temp["format"] = ele?.file?.includes("mp4") ? "mp4" : "hls";
-          res["sources"].push(temp);
-        });
-        // console.log({ res });
-        // if (res?.data?.format == "hls") setEmbedMode(true);
+        console.log({ res });
         if (res?.sources?.length > 0) {
           setNonEmbedSources(res?.sources);
-          res?.sources?.length > 0
-            ? setNonEmbedSourcesIndex(0)
-            : null;
+          res?.sources?.length > 0 ? setNonEmbedSourcesIndex(0) : null;
           setnonEmbedCaptions(res?.captions);
-          // setnonEmbedFormat(res?.data?.format);
           clearTimeout(autoEmbedMode);
-          // if (res?.data?.format == "hls") setEmbedMode(true);
+          setNonEmbedSourcesNotFound(false);
         } else {
+          setNonEmbedSourcesNotFound(true);
           autoEmbedMode = setTimeout(() => {
             setEmbedMode(true);
           }, 10000);
         }
       };
+
       fetch();
       // if (nonEmbedURl === "") setEmbedMode(true);
     }
@@ -383,9 +379,9 @@ const Watch = () => {
             }}
           >
             <option value="AGG">Aggregator : 1 (Multi-Server)</option>
-            <option value="VID">Aggregator : 2 (Vidsrc)</option>
+            <option value="VID">Aggregator : 2 (VidsrcMe)</option>
             <option value="PRO">Aggregator : 3 (Best-Server)</option>
-            <option value="EMB">Aggregator : 4</option>
+            <option value="EMB">Aggregator : 4 (VidSrcTo)</option>
             <option value="MULTI">Aggregator : 5 (Fast-Server)</option>
             <option value="SUP" defaultChecked>
               Aggregator : 6 (Multi/Most-Server)
@@ -438,7 +434,40 @@ const Watch = () => {
           <option value="false">NON Embed Mode (AD-free)</option>
         </select>
       </div>
-      <div className={`${styles.loader} skeleton`}>Loading</div>
+      <div className={`${styles.loader} skeleton`}>
+        {embedMode === false && id !== undefined && id !== null ? (
+          <div className={styles.videoProviders}>
+            {nonEmbedVideoProviders?.map((ele: any) => {
+              return (
+                <div className={styles.videoProvider}>
+                  <div
+                    className={`${styles.videoProviderName} ${ele?.status === "available" ? styles.available : null} ${ele?.status === "fetching" ? styles.fetching : null} ${ele?.status === "success" ? styles.success : null} ${ele?.status === "error" ? styles.error : null}`}
+                  >
+                    {ele?.name?.toUpperCase()}
+                  </div>
+                  <div
+                    className={`${styles.videoProviderStatus} ${ele?.status === "available" ? styles.available : null} ${ele?.status === "fetching" ? styles.fetching : null} ${ele?.status === "success" ? styles.success : null} ${ele?.status === "error" ? styles.error : null}`}
+                  >
+                    {ele?.status}
+                  </div>
+                </div>
+              );
+            })}
+            {nonEmbedSourcesNotFound ? (
+              <p className={`${styles.para2} ${styles.success}`}>
+                Server not found. Automatically switching to Embed Mode.
+              </p>
+            ) : (
+              <p className={styles.para}>
+                If Server not found, Then system will automatically switch to
+                Embed Mode in 10 seconds
+              </p>
+            )}
+          </div>
+        ) : (
+          "Loading"
+        )}
+      </div>
       {embedMode === false && nonEmbedSourcesIndex !== "" && (
         <Player
           option={{

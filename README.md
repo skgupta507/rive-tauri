@@ -1,4 +1,4 @@
-<!-- ![proxy-manager](https://socialify.git.ci/Developabile/rive-next/image?description=1&font=KoHo&forks=1&issues=1&language=1&owner=1&pulls=1&stargazers=1&theme=Auto)
+<!-- ![proxy-manager](https://socialify.git.ci/Developabile/rive-tauri/image?description=1&font=KoHo&forks=1&issues=1&language=1&owner=1&pulls=1&stargazers=1&theme=Auto)
  -->
 
 <div align="center">
@@ -25,13 +25,15 @@ Your Personal Streaming Oasis.
 <div align="left">
  <p>
   
-![Downloads](https://img.shields.io/github/downloads/Developabile/rive-tauri/total)
-![GitHub repo size](https://img.shields.io/github/repo-size/Developabile/rive-tauri)
-![Github Files](https://img.shields.io/github/directory-file-count/Developabile/rive-tauri)
+![App Downloads](https://img.shields.io/github/downloads/Developabile/rive-tauri/total?style=for-the-badge&labelColor=576B87&logoColor=white&color=7c3aed&cacheSeconds=3600)
+![GitHub repo size](https://img.shields.io/github/repo-size/Developabile/rive-tauri?style=for-the-badge&labelColor=576B87&logoColor=white&color=7c3aed&cacheSeconds=3600)
+<!-- ![Github Files](https://img.shields.io/github/directory-file-count/Developabile/rive-tauri) -->
 <!-- ![Github LOC](https://tokei.rs/b1/github/Developabile/rive-tauri) -->
-[![publish](https://github.com/Developabile/rive-tauri/actions/workflows/publish-to-auto-release.yml/badge.svg?branch=release)](https://github.com/Developabile/rive-tauri/actions/workflows/publish-to-auto-release.yml)
-![Github License](https://img.shields.io/github/license/Developabile/rive-tauri)
-![Github Release](https://img.shields.io/github/v/release/Developabile/rive-tauri)
+![Publish](https://img.shields.io/github/actions/workflow/status/Developabile/rive-tauri/publish-to-auto-release.yml?label=Publish&style=for-the-badge&labelColor=576B87&logo=githubactions&logoColor=white&color=7c3aed&cacheSeconds=3600)
+
+![Github Files](https://img.shields.io/github/directory-file-count/Developabile/rive-tauri?style=for-the-badge&labelColor=576B87&logoColor=white&color=7c3aed&cacheSeconds=3600)
+![Github Release](https://img.shields.io/github/v/release/Developabile/rive-tauri?style=for-the-badge&labelColor=576B87&logoColor=white&color=7c3aed&cacheSeconds=3600)
+![Github License](https://img.shields.io/github/license/Developabile/rive-tauri?style=for-the-badge&labelColor=576B87&logoColor=white&color=7c3aed&cacheSeconds=3600)
 
  </p>
 </div>
