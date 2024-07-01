@@ -56,6 +56,8 @@ jobs:
           echo NEXT_PUBLIC_STREAM_URL_SMASH=${{ secrets.NEXT_PUBLIC_STREAM_URL_SMASH }} >> .env.local
           echo NEXT_PUBLIC_STREAM_URL_ONE=${{ secrets.NEXT_PUBLIC_STREAM_URL_ONE }} >> .env.local
           echo NEXT_PUBLIC_STREAM_URL_ANY=${{ secrets.NEXT_PUBLIC_STREAM_URL_ANY }} >> .env.local
+          echo NEXT_PUBLIC_STREAM_URL_PRIME=${{ secrets.NEXT_PUBLIC_STREAM_URL_PRIME }} >> .env.local
+          echo NEXT_PUBLIC_STREAM_URL_RGS=${{ secrets.NEXT_PUBLIC_STREAM_URL_RGS }} >> .env.local
           echo NEXT_PUBLIC_STREAM_URL_WEB=${{ secrets.NEXT_PUBLIC_STREAM_URL_WEB }} >> .env.local
           echo NEXT_PUBLIC_FB_API_KEY=${{ secrets.NEXT_PUBLIC_FB_API_KEY }} >> .env.local
           echo NEXT_PUBLIC_FB_AUTH_DOMAIN=${{ secrets.NEXT_PUBLIC_FB_AUTH_DOMAIN }} >> .env.local
