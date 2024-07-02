@@ -45,7 +45,7 @@ const Navbar = ({ children }: any) => {
   useEffect(() => {
     if (params.get("type") !== null) setPathname("/" + params.get("type"));
     // else setPathname(path);
-    else {
+    else if (path !== null) {
       const arr = path?.split("/");
       setPathname("/" + arr[1]);
     }
@@ -158,10 +158,10 @@ const Navbar = ({ children }: any) => {
         data-tooltip-content="Settings"
       >
         {pathname === "/settings" ||
-        pathname === "/downloads" ||
-        pathname === "/disclaimer" ||
-        pathname === "/signup" ||
-        pathname === "/login" ? (
+          pathname === "/downloads" ||
+          pathname === "/disclaimer" ||
+          pathname === "/signup" ||
+          pathname === "/login" ? (
           <MdSettings className={styles.active} />
         ) : (
           <MdOutlineSettings className={styles.inactive} />

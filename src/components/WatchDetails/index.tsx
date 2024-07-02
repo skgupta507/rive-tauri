@@ -229,7 +229,7 @@ const WatchDetails = ({
                         {/* react-lazy-load-image-component */}
                         <LazyLoadImage
                           key={ele?.id}
-                          src={`${imagePlaceholder ? "/images/logo.svg" : ele?.still_path !== null && ele?.still_path !== undefined ? process.env.NEXT_PUBLIC_TMBD_IMAGE_URL + ele?.still_path : "/images/logo.svg"}`}
+                          src={`${imagePlaceholder ? "/images/logo.svg" : ele?.still_path !== null && ele?.still_path !== undefined ? process.env.NEXT_PUBLIC_TMBD_IMAGE_URL?.replace("/original", "/w342") + ele?.still_path : "/images/logo.svg"}`}
                           height="100%"
                           width="100%"
                           useIntersectionObserver={true}
@@ -244,7 +244,7 @@ const WatchDetails = ({
                             setImageLoading(false);
                           }}
                           loading="lazy"
-                          // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
+                        // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
                         />
                       </div>
                     </Link>
@@ -283,17 +283,17 @@ const WatchDetails = ({
         ) : null}
 
         {type === "tv" &&
-        category === "episodes" &&
-        categoryData?.episodes?.length === 0 ? (
+          category === "episodes" &&
+          categoryData?.episodes?.length === 0 ? (
           <p>No Episodes Found</p>
         ) : null}
 
         {type === "tv" && category === "episodes" && categoryData === undefined
           ? dummyList.map((ele) => (
-              <div className={styles.episode}>
-                <Skeleton height={100} className={styles.CardSmall} />
-              </div>
-            ))
+            <div className={styles.episode}>
+              <Skeleton height={100} className={styles.CardSmall} />
+            </div>
+          ))
           : null}
         <div className={styles.categoryDetails}>
           <div className={styles.casts}>
@@ -340,7 +340,7 @@ const WatchDetails = ({
                         {/* react-lazy-load-image-component */}
                         <LazyLoadImage
                           key={ele?.id}
-                          src={`${imagePlaceholder ? "/images/logo.svg" : ele?.profile_path !== null && ele?.profile_path !== undefined ? process.env.NEXT_PUBLIC_TMBD_IMAGE_URL + ele?.profile_path : "/images/logo.svg"}`}
+                          src={`${imagePlaceholder ? "/images/logo.svg" : ele?.profile_path !== null && ele?.profile_path !== undefined ? process.env.NEXT_PUBLIC_TMBD_IMAGE_URL?.replace("/original", "/w185") + ele?.profile_path : "/images/logo.svg"}`}
                           height="100%"
                           width="100%"
                           useIntersectionObserver={true}
@@ -355,7 +355,7 @@ const WatchDetails = ({
                             setImageLoading(false);
                           }}
                           loading="lazy"
-                          // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
+                        // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
                         />
                       </div>
                     </Link>
@@ -420,7 +420,7 @@ const WatchDetails = ({
                         {/* react-lazy-load-image-component */}
                         <LazyLoadImage
                           key={ele?.id}
-                          src={`${imagePlaceholder ? "/images/logo.svg" : ele?.profile_path !== null && ele?.profile_path !== undefined ? process.env.NEXT_PUBLIC_TMBD_IMAGE_URL + ele?.profile_path : "/images/logo.svg"}`}
+                          src={`${imagePlaceholder ? "/images/logo.svg" : ele?.profile_path !== null && ele?.profile_path !== undefined ? process.env.NEXT_PUBLIC_TMBD_IMAGE_URL?.replace("/original", "/w185") + ele?.profile_path : "/images/logo.svg"}`}
                           height="100%"
                           width="100%"
                           useIntersectionObserver={true}
@@ -435,7 +435,7 @@ const WatchDetails = ({
                             setImageLoading(false);
                           }}
                           loading="lazy"
-                          // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
+                        // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
                         />
                       </div>
                     </Link>

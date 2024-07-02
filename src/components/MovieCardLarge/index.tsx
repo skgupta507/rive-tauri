@@ -96,7 +96,7 @@ const MovieCardLarge = ({ data, media_type, genresMovie, genresTv }: any) => {
         {/* react-lazy-load-image-component */}
         <LazyLoadImage
           key={data?.id}
-          src={`${imagePlaceholder ? "/images/logo.svg" : (data?.poster_path !== null && data?.poster_path !== undefined) || (data?.profile_path !== null && data?.profile_path !== undefined) || (data?.still_path !== null && data?.still_path !== undefined) ? process.env.NEXT_PUBLIC_TMBD_IMAGE_URL + (data?.poster_path || data?.profile_path || data?.still_path) || null : "/images/logo.svg"}`}
+          src={`${imagePlaceholder ? "/images/logo.svg" : (data?.poster_path !== null && data?.poster_path !== undefined) || (data?.profile_path !== null && data?.profile_path !== undefined) || (data?.still_path !== null && data?.still_path !== undefined) ? process.env.NEXT_PUBLIC_TMBD_IMAGE_URL?.replace("/original", "/w185") + (data?.poster_path || data?.profile_path || data?.still_path) || null : "/images/logo.svg"}`}
           height="100%"
           width="100%"
           useIntersectionObserver={true}
@@ -115,7 +115,7 @@ const MovieCardLarge = ({ data, media_type, genresMovie, genresTv }: any) => {
             setImageLoading(false);
           }}
           alt={data?.id || "sm"}
-          // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
+        // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
         />
       </div>
       <div className={`${styles.metaData}`}>
