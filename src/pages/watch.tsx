@@ -31,7 +31,7 @@ const Watch = () => {
   // const [nonEmbedURL, setNonEmbedURL] = useState<any>("");
   const [nonEmbedSourcesIndex, setNonEmbedSourcesIndex] = useState<any>("");
   const [nonEmbedSources, setNonEmbedSources] = useState<any>("");
-  const [nonEmbedCaptions, setnonEmbedCaptions] = useState<any>();
+  const [nonEmbedCaptions, setnonEmbedCaptions] = useState<any>([]);
   const [nonEmbedVideoProviders, setNonEmbedVideoProviders] = useState([]);
   const [nonEmbedSourcesNotFound, setNonEmbedSourcesNotFound] =
     useState<any>(false);
@@ -169,6 +169,7 @@ const Watch = () => {
     let autoEmbedMode: NodeJS.Timeout;
     if (embedMode === false && id !== undefined && id !== null) {
       const fetch = async () => {
+        setNonEmbedSourcesNotFound(false);
         const providers: any = await axiosFetch({
           requestID: `VideoProviderServices`,
         });
@@ -223,6 +224,22 @@ const Watch = () => {
                 return provider;
               }),
             );
+            if (tempRes?.data?.sources?.length > 0) {
+              setNonEmbedSources((prev: any) => {
+                return [...prev, ...tempRes?.data?.sources];
+              });
+              tempRes?.data?.sources?.length > 0
+                ? setNonEmbedSourcesIndex(0)
+                : null;
+              setnonEmbedCaptions((prev: any) => {
+                const captions = Array.isArray(tempRes?.data?.captions)
+                  ? tempRes?.data?.captions
+                  : [];
+                return [...prev, ...captions];
+              });
+              clearTimeout(autoEmbedMode);
+              setNonEmbedSourcesNotFound(false);
+            }
           } catch (error) {
             console.error(`Error fetching data for provider ${ele}:`, error);
             setNonEmbedVideoProviders((prevProviders: any) =>
@@ -443,15 +460,13 @@ const Watch = () => {
           <div className={styles.videoProviders}>
             {nonEmbedVideoProviders?.map((ele: any) => {
               return (
-                <div className={`${styles.videoProvider} ${ele?.status === "available" ? styles.available : null} ${ele?.status === "fetching" ? styles.fetching : null} ${ele?.status === "success" ? styles.success : null} ${ele?.status === "error" ? styles.error : null}`}>
-                  <div
-                    className={`${styles.videoProviderName}`}
-                  >
+                <div
+                  className={`${styles.videoProvider} ${ele?.status === "available" ? styles.available : null} ${ele?.status === "fetching" ? styles.fetching : null} ${ele?.status === "success" ? styles.success : null} ${ele?.status === "error" ? styles.error : null}`}
+                >
+                  <div className={`${styles.videoProviderName}`}>
                     {ele?.name?.toUpperCase()}
                   </div>
-                  <div
-                    className={`${styles.videoProviderStatus} `}
-                  >
+                  <div className={`${styles.videoProviderStatus} `}>
                     {ele?.status}
                   </div>
                 </div>
@@ -469,12 +484,8 @@ const Watch = () => {
             )}
           </div>
         ) : (
-          <div
-            className={`${styles.loader}`}
-          >
-            <div
-              className={`${styles.scanner}`}
-            >
+          <div className={`${styles.loader}`}>
+            <div className={`${styles.scanner}`}>
               <span>Loading..</span>
             </div>
           </div>
