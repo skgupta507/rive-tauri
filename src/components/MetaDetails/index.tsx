@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./style.module.scss";
-import axiosFetch from "@/Utils/fetchBackend";
+import axiosFetch from "@/Utils/fetch";
 import Link from "next/link";
 // import { motion, AnimatePresence } from "framer-motion";
 import MovieCardLarge from "../MovieCardLarge";
