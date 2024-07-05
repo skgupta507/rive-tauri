@@ -45,7 +45,6 @@ jobs:
           echo NEXT_PUBLIC_TMDB_API_KEY=${{ secrets.NEXT_PUBLIC_TMDB_API_KEY }} >> .env.local
           echo NEXT_PUBLIC_TMBD_IMAGE_URL=${{ secrets.NEXT_PUBLIC_TMBD_IMAGE_URL }} >> .env.local
           echo NEXT_PUBLIC_PROVIDER_URL=${{ secrets.NEXT_PUBLIC_PROVIDER_URL }} >> .env.local
-          echo NEXT_PUBLIC_EXTERNAL_PROVIDER_URL=${{ secrets.NEXT_PUBLIC_EXTERNAL_PROVIDER_URL }} >> .env.local
           echo NEXT_PUBLIC_STREAM_URL_AGG=${{ secrets.NEXT_PUBLIC_STREAM_URL_AGG }} >> .env.local
           echo NEXT_PUBLIC_STREAM_URL_MULTI=${{ secrets.NEXT_PUBLIC_STREAM_URL_MULTI }} >> .env.local
           echo NEXT_PUBLIC_STREAM_URL_SUP=${{ secrets.NEXT_PUBLIC_STREAM_URL_SUP }} >> .env.local
