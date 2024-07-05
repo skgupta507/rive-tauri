@@ -100,7 +100,7 @@
   }
   .backBtn {
     position: absolute;
-    top: 2.5rem;
+    top: 3rem;
     left: 0;
     z-index: 2;
     cursor: pointer;
@@ -114,7 +114,7 @@
   }
   .episodeControl {
     position: absolute;
-    top: 2.5rem;
+    top: 3rem;
     right: 0;
     z-index: 2;
     cursor: pointer;
@@ -206,19 +206,39 @@
 }
 
 @keyframes loadingText {
-  0%, 10%, 100% {
+  0%,
+  10%,
+  100% {
     width: 0;
   }
 
-  10%,20%,30%,40%,50%,60%,70%,80%,90%,100% {
+  10%,
+  20%,
+  30%,
+  40%,
+  50%,
+  60%,
+  70%,
+  80%,
+  90%,
+  100% {
     border-right-color: transparent;
   }
 
-  11%,21%,31%,41%,51%,61%,71%,81%,91% {
+  11%,
+  21%,
+  31%,
+  41%,
+  51%,
+  61%,
+  71%,
+  81%,
+  91% {
     border-right-color: var(--primary-3);
   }
 
-  60%, 80% {
+  60%,
+  80% {
     width: 100%;
   }
 }
