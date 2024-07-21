@@ -202,7 +202,8 @@ const CategorywisePage = ({ categoryDiv, categoryPage = null }: any) => {
       </div>
       <div className={styles.jumpTo}>
         <h3>Jump to</h3>
-        <input type="number"
+        <input
+          type="number"
           className={styles.pageInput}
           value={currentPage}
           min={"1"}
@@ -212,15 +213,16 @@ const CategorywisePage = ({ categoryDiv, categoryPage = null }: any) => {
             // console.log({ val: e.target.value });
             if (e.target.value === "") setCurrentPage(e.target.value);
             else if (e.target.value === "0") {
-              toast.error(`Page number should be greater than 0`
-              );
-            }
-            else if (e.target.value <= totalpages) setCurrentPage(e.target.value);
+              toast.error(`Page number should be greater than 0`);
+            } else if (e.target.value <= totalpages)
+              setCurrentPage(e.target.value);
             else {
-              toast.error(`Page number should be less than Total pages: ${totalpages}`
+              toast.error(
+                `Page number should be less than Total pages: ${totalpages}`,
               );
             }
-          }} />
+          }}
+        />
       </div>
       <ReactPaginate
         containerClassName={styles.pagination}

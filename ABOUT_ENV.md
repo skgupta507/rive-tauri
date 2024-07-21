@@ -5,7 +5,7 @@ The values to be filled are:
 
 ## 1. Firebase configuration
 
-```.env
+```sh
 NEXT_PUBLIC_FB_API_KEY=
 NEXT_PUBLIC_FB_AUTH_DOMAIN=
 NEXT_PUBLIC_FB_PROJECT_ID=
@@ -41,7 +41,7 @@ Steps to get TMDB API KEY
 
 ## 3. Video Streaming API
 
-```.env
+```sh
 NEXT_PUBLIC_STREAM_URL_AGG=
 NEXT_PUBLIC_STREAM_URL_VID=
 NEXT_PUBLIC_STREAM_URL_PRO=
@@ -52,8 +52,10 @@ NEXT_PUBLIC_STREAM_URL_CLUB=
 NEXT_PUBLIC_STREAM_URL_SMASH=
 NEXT_PUBLIC_STREAM_URL_ONE=
 NEXT_PUBLIC_STREAM_URL_ANY=
+NEXT_PUBLIC_STREAM_URL_PRIME=
 NEXT_PUBLIC_STREAM_URL_RGS=
-NEXT_PUBLIC_STREAM_URL_WEB=
+NEXT_PUBLIC_STREAM_URL_FRE=
+NEXT_PUBLIC_STREAM_URL_POR=
 NEXT_PUBLIC_STREAM_URL_WEB=
 ```
 
@@ -71,11 +73,43 @@ If you do some researching, then you will find the right services here.
 
 ## 4. Vidsrc Scrapper API
 
-```.env
+```sh
 NEXT_PUBLIC_PROVIDER_URL=
 ```
 
 You can find the api, if you search for **vidsrc scrappers**, here we are using a 3rd party API(not ours) which scrapes vidsrc.to and vidsrc.me
+
+## 5. Google Analytics
+
+```sh
+NEXT_PUBLIC_GT_MEASUREMENT_ID=
+```
+
+Add your Measurement ID from your Google Tag Manager/ Google Analytics, to track websites for Analytics purposes.  
+We are usig Google Analytics with Google Tag Manager to track multiple deployments.  
+This is optional, either add this env variable  
+Or comment out these three lines _(line 14 , 19 & 113)_ in `./src/pages/_app.tsx`:
+
+```js
+import { GoogleAnalytics } from "@next/third-parties/google";
+
+const GTag: any = process.env.NEXT_PUBLIC_GT_MEASUREMENT_ID;
+
+<GoogleAnalytics gaId={GTag} />
+```
+
+Steps to generate Google Tag in GA:
+
+1. Go to the Admin page in Google Analytics(GA)
+2. Navigate to Data Streams
+3. Select the Data Stream of your property
+4. Select Configure Tag Settings
+5. Click Configure your domains
+6. Enter all the domains you want to track
+7. Verify that the tag on each page uses the same tag ID from the same web data stream
+8. Click Save
+
+---
 
 If there are anymore env vars left, give them any random values, as they were used in dev only and not in prod.
 

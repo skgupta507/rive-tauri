@@ -158,10 +158,10 @@ const Navbar = ({ children }: any) => {
         data-tooltip-content="Settings"
       >
         {pathname === "/settings" ||
-          pathname === "/downloads" ||
-          pathname === "/disclaimer" ||
-          pathname === "/signup" ||
-          pathname === "/login" ? (
+        pathname === "/downloads" ||
+        pathname === "/disclaimer" ||
+        pathname === "/signup" ||
+        pathname === "/login" ? (
           <MdSettings className={styles.active} />
         ) : (
           <MdOutlineSettings className={styles.inactive} />

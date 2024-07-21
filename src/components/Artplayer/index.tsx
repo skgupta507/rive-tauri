@@ -31,22 +31,22 @@ export default function Player({
     const subtitles =
       captions?.length > 0
         ? captions?.map((ele: any, ind: any) => {
-          let def = false;
-          if (ele?.label?.toLowerCase()?.includes("english")) {
-            def = true;
-          }
-          return {
-            // default: def,
-            html: ele?.label,
-            url: ele?.file,
-          };
-        })
+            let def = false;
+            if (ele?.label?.toLowerCase()?.includes("english")) {
+              def = true;
+            }
+            return {
+              // default: def,
+              html: ele?.label,
+              url: ele?.file,
+            };
+          })
         : [
-          {
-            html: "No Captions",
-            url: "",
-          },
-        ];
+            {
+              html: "No Captions",
+              url: "",
+            },
+          ];
     Artplayer.MOBILE_CLICK_PLAY = true;
     const art = new Artplayer({
       ...option,
@@ -70,8 +70,8 @@ export default function Player({
       customType:
         format === "hls"
           ? {
-            m3u8: playM3u8,
-          }
+              m3u8: playM3u8,
+            }
           : {},
       // controls: [
       //   {
@@ -151,29 +151,29 @@ export default function Player({
           selector:
             format === "hls"
               ? [
-                {
-                  html: "Download HLS (Recommended)",
-                  url: option.url,
-                  opt: 1,
-                },
-                {
-                  html: "Download HLS (mediatools)",
-                  url: option.url,
-                  opt: 2,
-                },
-                {
-                  html: "Download HLS (thetuhin)",
-                  url: option.url,
-                  opt: 3,
-                },
-              ]
+                  {
+                    html: "Download HLS (Recommended)",
+                    url: option.url,
+                    opt: 1,
+                  },
+                  {
+                    html: "Download HLS (mediatools)",
+                    url: option.url,
+                    opt: 2,
+                  },
+                  {
+                    html: "Download HLS (thetuhin)",
+                    url: option.url,
+                    opt: 3,
+                  },
+                ]
               : [
-                {
-                  html: "Download mp4",
-                  url: option.url,
-                  opt: 4,
-                },
-              ],
+                  {
+                    html: "Download mp4",
+                    url: option.url,
+                    opt: 4,
+                  },
+                ],
           onSelect: function (item: any) {
             if (item.opt === 1) {
               // window.open(
@@ -241,21 +241,21 @@ export default function Player({
       plugins:
         format === "hls"
           ? [
-            artplayerPluginHlsQuality({
-              // Show quality in control
-              // control: true,
+              artplayerPluginHlsQuality({
+                // Show quality in control
+                // control: true,
 
-              // Show quality in setting
-              setting: true,
+                // Show quality in setting
+                setting: true,
 
-              // Get the resolution text from level
-              getResolution: (level: any) => level.height + "P",
+                // Get the resolution text from level
+                getResolution: (level: any) => level.height + "P",
 
-              // I18n
-              title: "Quality",
-              auto: "Auto",
-            }),
-          ]
+                // I18n
+                title: "Quality",
+                auto: "Auto",
+              }),
+            ]
           : [],
     });
 

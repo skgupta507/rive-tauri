@@ -110,7 +110,7 @@
   }
 }
 
-.jumpTo{
+.jumpTo {
   width: 100%;
   display: flex;
   justify-content: flex-end;
@@ -119,7 +119,7 @@
   padding: 1rem;
   gap: 0.5rem;
   margin-bottom: 1.5rem;
-  .pageInput{
+  .pageInput {
     margin: 0 0;
     border: none;
     outline: none;
@@ -162,7 +162,7 @@
       margin: 0 auto;
       flex-wrap: wrap;
     }
-    .jumpTo{
+    .jumpTo {
       margin-bottom: 0 !important;
     }
   }

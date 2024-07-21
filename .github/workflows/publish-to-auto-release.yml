@@ -45,6 +45,7 @@ jobs:
           echo NEXT_PUBLIC_TMDB_API_KEY=${{ secrets.NEXT_PUBLIC_TMDB_API_KEY }} >> .env.local
           echo NEXT_PUBLIC_TMBD_IMAGE_URL=${{ secrets.NEXT_PUBLIC_TMBD_IMAGE_URL }} >> .env.local
           echo NEXT_PUBLIC_PROVIDER_URL=${{ secrets.NEXT_PUBLIC_PROVIDER_URL }} >> .env.local
+          echo NEXT_PUBLIC_PROVIDER_ENV=${{ secrets.NEXT_PUBLIC_PROVIDER_ENV }} >> .env.local
           echo NEXT_PUBLIC_STREAM_URL_AGG=${{ secrets.NEXT_PUBLIC_STREAM_URL_AGG }} >> .env.local
           echo NEXT_PUBLIC_STREAM_URL_MULTI=${{ secrets.NEXT_PUBLIC_STREAM_URL_MULTI }} >> .env.local
           echo NEXT_PUBLIC_STREAM_URL_SUP=${{ secrets.NEXT_PUBLIC_STREAM_URL_SUP }} >> .env.local
@@ -57,6 +58,8 @@ jobs:
           echo NEXT_PUBLIC_STREAM_URL_ANY=${{ secrets.NEXT_PUBLIC_STREAM_URL_ANY }} >> .env.local
           echo NEXT_PUBLIC_STREAM_URL_PRIME=${{ secrets.NEXT_PUBLIC_STREAM_URL_PRIME }} >> .env.local
           echo NEXT_PUBLIC_STREAM_URL_RGS=${{ secrets.NEXT_PUBLIC_STREAM_URL_RGS }} >> .env.local
+          echo NEXT_PUBLIC_STREAM_URL_FRE=${{ secrets.NEXT_PUBLIC_STREAM_URL_FRE }} >> .env.local
+          echo NEXT_PUBLIC_STREAM_URL_POR=${{ secrets.NEXT_PUBLIC_STREAM_URL_POR }} >> .env.local
           echo NEXT_PUBLIC_STREAM_URL_WEB=${{ secrets.NEXT_PUBLIC_STREAM_URL_WEB }} >> .env.local
           echo NEXT_PUBLIC_FB_API_KEY=${{ secrets.NEXT_PUBLIC_FB_API_KEY }} >> .env.local
           echo NEXT_PUBLIC_FB_AUTH_DOMAIN=${{ secrets.NEXT_PUBLIC_FB_AUTH_DOMAIN }} >> .env.local

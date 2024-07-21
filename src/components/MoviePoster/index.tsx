@@ -63,7 +63,7 @@ const MoviePoster = ({ data, media_type }: any) => {
             // console.log({ e });
             setImagePlaceholder(true);
           }}
-        // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
+          // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
         />
       </div>
     </Link>

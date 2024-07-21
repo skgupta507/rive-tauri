@@ -1,6 +1,6 @@
 [package]
 name = "Rive"
-version = "2.4.0"
+version = "2.5.0"
 description = "Your Personal Streaming Oasis"
 authors = ["Kumar Ashish Ranjan"]
 license = "BSD 4-Clause"

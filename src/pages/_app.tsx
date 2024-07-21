@@ -1,7 +1,8 @@
 import "@/styles/globals.scss";
 import Layout from "@/components/Layout";
 import Head from "next/head";
-import { Toaster } from "sonner";
+import Script from "next/script";
+import { Toaster, toast } from "sonner";
 import "@/styles/checkbox.scss";
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
@@ -10,10 +11,12 @@ import { useState, useEffect } from "react";
 import NProgress from "nprogress";
 import "@/styles/nprogress.scss";
 import "react-loading-skeleton/dist/skeleton.css";
+// import { GoogleAnalytics } from "@next/third-parties/google";
 
 export default function App({ Component, pageProps }: any) {
   const [isLoading, setIsLoading] = useState(false);
   NProgress.configure({ showSpinner: false });
+  // const GTag: any = process.env.NEXT_PUBLIC_GT_MEASUREMENT_ID;
   // NProgress.configure({
   //   template: '<div class="bar" role="bar"><div class="peg"></div></div>'
   // });
@@ -32,6 +35,38 @@ export default function App({ Component, pageProps }: any) {
       setIsLoading(false);
     });
   }, [Router]);
+
+  useEffect(() => {
+    // Disable context menu
+    const disableContextMenu = (event: MouseEvent) => {
+      event.preventDefault();
+      toast.info("Context Menu has been disabled");
+    };
+
+    // Disable DevTools shortcut (CTRL+SHIFT+I)
+    const disableDevToolsShortcut = (event: KeyboardEvent) => {
+      if (
+        (event.ctrlKey && event.shiftKey && event.key === "I") || // CTRL+SHIFT+I
+        (event.ctrlKey && event.shiftKey && event.key === "J") || // CTRL+SHIFT+J
+        (event.ctrlKey && event.shiftKey && event.key === "C") || // CTRL+SHIFT+C
+        event.key === "F12" // F12
+      ) {
+        event.preventDefault();
+        toast.info("Dev Tools has been disabled");
+      }
+    };
+
+    // Add event listeners
+    window.addEventListener("contextmenu", disableContextMenu);
+    window.addEventListener("keydown", disableDevToolsShortcut);
+
+    // Cleanup event listeners on unmount
+    return () => {
+      window.removeEventListener("contextmenu", disableContextMenu);
+      window.removeEventListener("keydown", disableDevToolsShortcut);
+    };
+  }, []);
+
   return (
     <>
       <Head>
@@ -75,6 +110,11 @@ export default function App({ Component, pageProps }: any) {
         <Tooltip id="tooltip" className="react-tooltip" />
         <Component {...pageProps} />
       </Layout>
+      {/* <GoogleAnalytics gaId={GTag} /> */}
+      <Script
+        disable-devtool-auto
+        src="https://cdn.jsdelivr.net/npm/disable-devtool"
+      />
     </>
   );
 }
