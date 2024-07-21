@@ -99,15 +99,15 @@ export default async function axiosFetch({
 
     // provider
     VideoProviderServices:
-      ProviderENV === "cloudflare"
+      ProviderENV != "original"
         ? `${ProviderURL}/api/providers`
         : `${ProviderURL}/providers`,
     movieVideoProvider:
-      ProviderENV === "cloudflare"
+      ProviderENV != "original"
         ? `${ProviderURL}/api/provider?provider=${service}&id=${id}`
         : `${ProviderURL}/${service}/movie/${id}`,
     tvVideoProvider:
-      ProviderENV === "cloudflare"
+      ProviderENV != "original"
         ? `${ProviderURL}/api/provider?provider=${service}&id=${id}&season=${season}&episode=${episode}`
         : `${ProviderURL}/${service}/tv/${id}/${season}/${episode}`,
 
