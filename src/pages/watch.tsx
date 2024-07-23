@@ -592,9 +592,9 @@ const Watch = () => {
         ) : null}
 
         {source === "MULTI" &&
-          id !== "" &&
-          id !== null &&
-          embedMode === true ? (
+        id !== "" &&
+        id !== null &&
+        embedMode === true ? (
           <iframe
             scrolling="no"
             src={
@@ -640,9 +640,9 @@ const Watch = () => {
         ) : null}
 
         {source === "SMASH" &&
-          id !== "" &&
-          id !== null &&
-          embedMode === true ? (
+        id !== "" &&
+        id !== null &&
+        embedMode === true ? (
           <iframe
             scrolling="no"
             src={
@@ -688,9 +688,9 @@ const Watch = () => {
         ) : null}
 
         {source === "PRIME" &&
-          id !== "" &&
-          id !== null &&
-          embedMode === true ? (
+        id !== "" &&
+        id !== null &&
+        embedMode === true ? (
           <iframe
             scrolling="no"
             src={

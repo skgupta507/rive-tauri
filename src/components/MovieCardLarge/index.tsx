@@ -115,7 +115,7 @@ const MovieCardLarge = ({ data, media_type, genresMovie, genresTv }: any) => {
             setImageLoading(false);
           }}
           alt={data?.id || "sm"}
-        // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
+          // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
         />
       </div>
       <div className={`${styles.metaData}`}>

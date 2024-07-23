@@ -150,8 +150,8 @@ const Collections = ({ categoryType }: any) => {
           placeholder="Please enter at least 2 characters to search collections...."
           onFocus={() => setIsSearchBarFocused(true)}
           onBlur={() => setIsSearchBarFocused(false)}
-        // data-tooltip-id="tooltip"
-        // data-tooltip-html={"<div>focus :  <span class='tooltip-btn'>/</span></div><div>unfocus :  <span class='tooltip-btn'>Esc</span></div>"}
+          // data-tooltip-id="tooltip"
+          // data-tooltip-html={"<div>focus :  <span class='tooltip-btn'>/</span></div><div>unfocus :  <span class='tooltip-btn'>Esc</span></div>"}
         />
         <div className={styles.inputShortcut}>
           {!isSearchBarFocused ? (

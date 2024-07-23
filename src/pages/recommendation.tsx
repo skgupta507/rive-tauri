@@ -135,7 +135,7 @@ const Recommendation = ({ categoryDiv, categoryPage = null }: any) => {
                     onClick={() => {
                       document
                         .querySelectorAll(`.${styles.HomeListSection}`)
-                      [ind].scrollBy(-700, 0);
+                        [ind].scrollBy(-700, 0);
                     }}
                     data-tooltip-id="tooltip"
                     data-tooltip-content="Swipe Left"
@@ -145,7 +145,7 @@ const Recommendation = ({ categoryDiv, categoryPage = null }: any) => {
                     onClick={() => {
                       document
                         .querySelectorAll(`.${styles.HomeListSection}`)
-                      [ind].scrollBy(700, 0);
+                        [ind].scrollBy(700, 0);
                     }}
                     data-tooltip-id="tooltip"
                     data-tooltip-content="Swipe Right"

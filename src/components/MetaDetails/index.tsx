@@ -253,7 +253,7 @@ const MetaDetails = ({ id, type, data }: any) => {
                               setImageLoading(false);
                             }}
                             loading="lazy"
-                          // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
+                            // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
                           />
                         </div>
                       </Link>
@@ -293,21 +293,21 @@ const MetaDetails = ({ id, type, data }: any) => {
         ) : null}
 
         {type === "tv" &&
-          category === "episodes" &&
-          categoryData?.episodes?.length === 0 ? (
+        category === "episodes" &&
+        categoryData?.episodes?.length === 0 ? (
           <p>No Episodes Found</p>
         ) : null}
 
         {type === "tv" && category === "episodes" && categoryData === undefined
           ? dummyList.map((ele) => (
-            <div className={styles.episode}>
-              <Skeleton
-                height={100}
-                className={styles.CardSmall}
-                style={{ margin: "0.5rem 0" }}
-              />
-            </div>
-          ))
+              <div className={styles.episode}>
+                <Skeleton
+                  height={100}
+                  className={styles.CardSmall}
+                  style={{ margin: "0.5rem 0" }}
+                />
+              </div>
+            ))
           : null}
         <div className={styles.categoryDetails}>
           {category === "overview" && type !== "person" && (
@@ -361,9 +361,9 @@ const MetaDetails = ({ id, type, data }: any) => {
                       {new Date(data?.next_episode_to_air?.air_date).getDate()}{" "}
                       {
                         monthNames[
-                        new Date(
-                          data?.next_episode_to_air?.air_date,
-                        ).getMonth()
+                          new Date(
+                            data?.next_episode_to_air?.air_date,
+                          ).getMonth()
                         ]
                       }{" "}
                       {new Date(
@@ -483,7 +483,7 @@ const MetaDetails = ({ id, type, data }: any) => {
                             setImageLoading(false);
                           }}
                           loading="lazy"
-                        // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
+                          // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
                         />
                       </div>
                     </Link>
@@ -550,7 +550,7 @@ const MetaDetails = ({ id, type, data }: any) => {
                             setImageLoading(false);
                           }}
                           loading="lazy"
-                        // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
+                          // style={!imageLoading ? { opacity: 1 } : { opacity: 0 }}
                         />
                       </div>
                     </Link>
