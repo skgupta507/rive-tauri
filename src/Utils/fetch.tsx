@@ -98,18 +98,9 @@ export default async function axiosFetch({
     withKeywordsMovie: `${baseURL}/discover/movie?with_keywords=${genreKeywords}&language=${language}&sort_by=${sortBy}${year != undefined ? "&first_air_date_year=" + year : ""}${country != undefined ? "&with_origin_country=" + country : ""}&page=${page}&release_date.lte=${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}&with_runtime.gte=1`,
 
     // provider
-    VideoProviderServices:
-      ProviderENV === "cloudflare"
-        ? `${ProviderURL}/api/providers`
-        : `${ProviderURL}/providers`,
-    movieVideoProvider:
-      ProviderENV === "cloudflare"
-        ? `${ProviderURL}/api/provider?provider=${service}&id=${id}`
-        : `${ProviderURL}/${service}/movie/${id}`,
-    tvVideoProvider:
-      ProviderENV === "cloudflare"
-        ? `${ProviderURL}/api/provider?provider=${service}&id=${id}&season=${season}&episode=${episode}`
-        : `${ProviderURL}/${service}/tv/${id}/${season}/${episode}`,
+    VideoProviderServices: `${ProviderURL}/api/providers`,
+    movieVideoProvider: `${ProviderURL}/api/provider?provider=${service}&id=${id}`,
+    tvVideoProvider: `${ProviderURL}/api/provider?provider=${service}&id=${id}&season=${season}&episode=${episode}`,
 
     // External provider
     movieExternalVideoProvider: `${ExternalProviderURL}/${id}?s=0&e=0`,

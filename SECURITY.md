@@ -8,4 +8,4 @@ The latest version of rive-next is the only version that is supported, as it is 
 
 You can contact the rive-next maintainers to report a vulnerability:
 
-- Report the vulnerability in the [rive-next Issues](https://github.com/Developabile/rive-next/issues)
+- Report the vulnerability in the [rive-next Issues](https://github.com/Developabile/rive-tauri~/issues)
